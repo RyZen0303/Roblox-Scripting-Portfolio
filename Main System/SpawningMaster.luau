@@ -60,7 +60,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 		local isMainBase = false
 
 		if teamName == "" then
-			warn("🚨 Transaction Refused: Player contains no valid native team assignment reference.")
+			warn(" Transaction Refused: Player contains no valid native team assignment reference.")
 			return false
 		end
 
@@ -77,7 +77,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 
 		if not isMainBase then
 			if not GameLogic.IsPointOwnedByTeam(targetPointName, teamName) then
-				warn("🚨 Security Alert! " .. player.Name .. " bypassed client UI on point: " .. tostring(targetPointName))
+				warn(" Security Alert! " .. player.Name .. " bypassed client UI on point: " .. tostring(targetPointName))
 				return false 
 			end
 			targetPointName = "Spawn_" .. targetPointName
@@ -106,14 +106,14 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 		local rawTankName = (actionType == "SpawnTank") and data1 or actionType
 		local buttonPad = (actionType == "SpawnTank") and data2 or data1 
 
-		-- [[ ⏱️ PLAYER SPAWN RATE LIMITER ]] --
+		-- [[ ⏱ PLAYER SPAWN RATE LIMITER ]] --
 		local lastSpawnTime = player:GetAttribute("LastTankSpawnTime") or 0
 		local currentTime = os.time()
 		local SPAWN_COOLDOWN_TIME = 30
 
 		if (currentTime - lastSpawnTime) < SPAWN_COOLDOWN_TIME then
 			local remainingTime = SPAWN_COOLDOWN_TIME - (currentTime - lastSpawnTime)
-			warn(string.format("🚫 Cooldown Active: %s must wait %d more seconds.", player.Name, remainingTime))
+			warn(string.format(" Cooldown Active: %s must wait %d more seconds.", player.Name, remainingTime))
 
 			local messageEvent = eventsFolder:WaitForChild("ShowSpawnMessageEvent", 5)
 			if messageEvent then
@@ -136,7 +136,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 		end
 
 		if not tankTemplate or not realSpawnArea then
-			warn("⚠️️ Production Error: Missing assets for " .. buttonPad.Name)
+			warn(" Production Error: Missing assets for " .. buttonPad.Name)
 			return false
 		end
 
@@ -147,7 +147,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 			local playerTeam = player.Team and player.Team.Name
 
 			if not playerTeam or not GameLogic.IsPointOwnedByTeam(zoneName, playerTeam) then
-				warn(string.format("🚫 Spawn Denied: %s attempts to deploy tank at contested/hostile Zone %s", player.Name, zoneName))
+				warn(string.format(" Spawn Denied: %s attempts to deploy tank at contested/hostile Zone %s", player.Name, zoneName))
 
 				local messageEvent = eventsFolder:FindFirstChild("ShowSpawnMessageEvent")
 				if messageEvent and messageEvent:IsA("RemoteEvent") then
@@ -156,7 +156,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 
 				return false, "Capture the zone first!"
 			end
-			print(string.format("🪖 Spawn Authorized: Node %s ownership verified for Team %s", zoneName, playerTeam))
+			print(string.format(" Spawn Authorized: Node %s ownership verified for Team %s", zoneName, playerTeam))
 		end
 
 		-- CALCULATE FINANCIAL COST
@@ -193,7 +193,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 			player:SetAttribute("LastTankSpawnTime", os.time())
 
 			-- =========================================================================
-			-- [[ 🛠️ VISUAL ADD-ON CONFIGURATION ]]
+			-- [[  VISUAL ADD-ON CONFIGURATION ]]
 			-- =========================================================================
 			local function applyVisibility(targetInstance)
 				if targetInstance:IsA("BasePart") then targetInstance.Transparency = 0 end
@@ -225,7 +225,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 			end
 
 			-- =========================================================================
-			-- [[ ⚓ BILLBOARD UI & NETWORK OWNER SETTING ]]
+			-- [[  BILLBOARD UI & NETWORK OWNER SETTING ]]
 			-- =========================================================================
 			local billboard = Instance.new("BillboardGui")
 			billboard.Name = "SpawnTimerUI"
@@ -295,7 +295,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 
 			return true
 		else
-			warn("💸 Surcharge Lockout: Transacting client carries insufficient points balance " .. tostring(totalCost))
+			warn(" Surcharge Lockout: Transacting client carries insufficient points balance " .. tostring(totalCost))
 			return false, "Insufficient Points"
 		end
 	end
