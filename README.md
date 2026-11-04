@@ -2,32 +2,30 @@
 
 Selected gameplay systems from **Land Warfare**, an independently developed and playable Roblox game.
 
-This portfolio highlights gameplay engineering and performance-conscious Luau implementation.
-
-## Main system
+## Included systems
 
 ### Driving System
+Complete folder copied from the original project:
+- `TankClientSuspension.luau`
+- `TankDrivingMaster.luau`
+- `WheelVisualManager.luau`
 
-The complete `Driving System` folder is included:
+### Main System
+Complete folder copied from the original project:
+- `DriverStateMaster.luau`
+- `GameLogic.luau`
+- `GameplayMaster.luau`
+- `HealthDamageMaster.luau`
+- `LeaderStatsManager.luau`
+- `PhysicsManager.luau`
+- `SpawnPadManager.luau`
+- `SpawningMaster.luau`
+- `SpawningModule.luau`
+- `TankInput.luau`
+- `TankModuleScript.luau`
+- `TeamManager.luau`
 
-- `TankDrivingMaster.luau` — tank movement, steering, braking, server-side input checks, network ownership handoff, and shared raycast filtering.
-- `TankClientSuspension.luau` — client-side suspension/physics handling.
-- `WheelVisualManager.luau` — wheel visual behavior.
-
-Together, these scripts demonstrate vehicle gameplay systems, physics integration, raycasting, and performance-oriented data/state handling.
-
-### Fire Control System (selected files)
-
-Two related files are included:
-
-- `ProjectileMaster.luau` — server-side projectile simulation, hit detection, driver/vehicle validation, reload control, damage routing, and NPC firing.
-- `BulletVisualManager.luau` — client-side tracer rendering, trajectory updates, muzzle effects, and visual cleanup.
-
-The server owns gameplay-relevant projectile behavior; clients render the replicated tracer visuals.
-
-## Project context
-
-These are selected code samples from **Land Warfare**, not a copy of the complete game. They rely on project-specific instances, attributes, RemoteEvents, collision groups, and asset hierarchy, so they are provided for code review rather than as drop-in packages.
+These scripts are project-specific and depend on the original game's instances, attributes, RemoteEvents, and asset hierarchy. They are provided for code review, not as drop-in packages.
 
 ## Development approach
 
@@ -36,12 +34,23 @@ I use AI tools as coding assistance. I am responsible for the game and system de
 ## Repository structure
 
 ```
-Main system/
+Roblox-Scripting-Portfolio/
 ├── Driving System/
 │   ├── TankClientSuspension.luau
 │   ├── TankDrivingMaster.luau
 │   └── WheelVisualManager.luau
-└── Fire Control System/
-    ├── ProjectileMaster.luau
-    └── BulletVisualManager.luau
+├── Main System/
+│   ├── DriverStateMaster.luau
+│   ├── GameLogic.luau
+│   ├── GameplayMaster.luau
+│   ├── HealthDamageMaster.luau
+│   ├── LeaderStatsManager.luau
+│   ├── PhysicsManager.luau
+│   ├── SpawnPadManager.luau
+│   ├── SpawningMaster.luau
+│   ├── SpawningModule.luau
+│   ├── TankInput.luau
+│   ├── TankModuleScript.luau
+│   └── TeamManager.luau
+└── README.md
 ```
