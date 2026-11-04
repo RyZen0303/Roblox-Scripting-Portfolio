@@ -10,6 +10,13 @@ Complete folder copied from the original project:
 - `TankDrivingMaster.luau`
 - `WheelVisualManager.luau`
 
+### Fire Control System
+Complete folder copied from the original project:
+- `BulletVisualManager.luau`
+- `ProjectileMaster.luau`
+- `RotationAndFiring.luau`
+- `TurretMaster.luau`
+
 ### Main System
 Complete folder copied from the original project:
 - `DriverStateMaster.luau`
@@ -39,6 +46,11 @@ Roblox-Scripting-Portfolio/
 │   ├── TankClientSuspension.luau
 │   ├── TankDrivingMaster.luau
 │   └── WheelVisualManager.luau
+├── Fire Control System/
+│   ├── BulletVisualManager.luau
+│   ├── ProjectileMaster.luau
+│   ├── RotationAndFiring.luau
+│   └── TurretMaster.luau
 ├── Main System/
 │   ├── DriverStateMaster.luau
 │   ├── GameLogic.luau
