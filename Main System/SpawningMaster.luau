@@ -106,7 +106,7 @@ SpawnFunction.OnServerInvoke = function(player, actionType, data1, data2, addOnT
 		local rawTankName = (actionType == "SpawnTank") and data1 or actionType
 		local buttonPad = (actionType == "SpawnTank") and data2 or data1 
 
-		-- [[ ⏱ PLAYER SPAWN RATE LIMITER ]] --
+		-- [[  PLAYER SPAWN RATE LIMITER ]] --
 		local lastSpawnTime = player:GetAttribute("LastTankSpawnTime") or 0
 		local currentTime = os.time()
 		local SPAWN_COOLDOWN_TIME = 30
