@@ -87,10 +87,10 @@ local function checkOrPurgeBlockingVehicles(spawnCFrame, spawnAreaSize, skipIfOc
 						or object:FindFirstChild("Main Hull", true) then
 
 						if skipIfOccupied then
-							print("⚠ [SpawningModule]: Space occupied by " .. object.Name .. ". Skipping spawn.")
+							print(" [SpawningModule]: Space occupied by " .. object.Name .. ". Skipping spawn.")
 							return true
 						else
-							print("💥 [SpawningModule Radar]: Vaporized blocking vehicle: " .. object.Name)
+							print(" [SpawningModule Radar]: Vaporized blocking vehicle: " .. object.Name)
 							object:Destroy()
 						end
 					end
@@ -136,7 +136,7 @@ function SpawningModule.SpawnTank(tankTemplate, baseCFrame, options)
 		local timeElapsed = os.time() - trackerData.SpawnTime
 
 		if timeElapsed < protectionTime then
-			print("🚫 [SpawningModule]: Spawn aborted due to protection lockout window.")
+			print(" [SpawningModule]: Spawn aborted due to protection lockout window.")
 			return nil, "Protection Active"
 		end
 
