@@ -2,69 +2,28 @@
 
 Selected gameplay systems from **Land Warfare**, an independently developed and playable Roblox game.
 
+## Gameplay Showcase
+
 https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
-## Included systems
+## Development Process
 
-### Driving System
-Complete folder copied from the original project:
-- `TankClientSuspension.luau`
-- `TankDrivingMaster.luau`
-- `WheelVisualManager.luau`
+My development process is based on identifying problems through implementation and playtesting, investigating their causes, and validating solutions in the actual game.
 
-### Fire Control System
-Complete folder copied from the original project:
-- `BulletVisualManager.luau`
-- `ProjectileMaster.luau`
-- `RotationAndFiring.luau`
-- `TurretMaster.luau`
+1. **Identify the problem** — Implement or playtest a feature, observe unexpected behavior, and define the specific issue.
+2. **Investigate the cause** — Inspect script behavior, output logs, relevant Roblox systems, and interactions between components. I form and test possible explanations rather than assuming the first suggestion is correct.
+3. **Isolate and test** — Reduce unrelated variables where possible, use debugging output or temporary changes, and test hypotheses against the behavior in-game.
+4. **Implement the solution** — Make changes based on the cause identified, while considering how the affected systems interact with the rest of the project.
+5. **Validate and refine** — Playtest the result, check relevant edge cases and supported devices, and revise the implementation if problems remain.
 
-### Main System
-Complete folder copied from the original project:
-- `DriverStateMaster.luau`
-- `GameLogic.luau`
-- `GameplayMaster.luau`
-- `HealthDamageMaster.luau`
-- `LeaderStatsManager.luau`
-- `PhysicsManager.luau`
-- `SpawnPadManager.luau`
-- `SpawningMaster.luau`
-- `SpawningModule.luau`
-- `TankInput.luau`
-- `TankModuleScript.luau`
-- `TeamManager.luau`
+This process is iterative. A proposed fix is not treated as correct until its behavior has been tested. For example, during vehicle suspension development, I investigated a tank-flipping issue by isolating the suspension and tracing physics network ownership across server-side systems. The investigation led to separating client-side suspension behavior from server-side validation.
 
-These scripts are project-specific and depend on the original game's instances, attributes, RemoteEvents, and asset hierarchy. They are provided for code review, not as drop-in packages.
+## AI-Assisted Workflow
 
-## Development approach
+I use AI tools as coding and investigation assistance. I remain responsible for system design, evaluating suggestions, integrating changes into the project, testing behavior, identifying root causes, and refining the implementation. AI-generated suggestions are treated as hypotheses to verify, not as automatically correct solutions.
 
-I use AI tools as coding assistance. I am responsible for the game and system design, integrating the code into the project, testing behavior, investigating issues, and refining the implementation. This is an AI-assisted development workflow, not a claim that every line was written without assistance.
+This is an AI-assisted development workflow, not a claim that every line was written without assistance.
 
-## Repository structure
+## Code Context
 
-```
-Roblox-Scripting-Portfolio/
-├── Driving System/
-│   ├── TankClientSuspension.luau
-│   ├── TankDrivingMaster.luau
-│   └── WheelVisualManager.luau
-├── Fire Control System/
-│   ├── BulletVisualManager.luau
-│   ├── ProjectileMaster.luau
-│   ├── RotationAndFiring.luau
-│   └── TurretMaster.luau
-├── Main System/
-│   ├── DriverStateMaster.luau
-│   ├── GameLogic.luau
-│   ├── GameplayMaster.luau
-│   ├── HealthDamageMaster.luau
-│   ├── LeaderStatsManager.luau
-│   ├── PhysicsManager.luau
-│   ├── SpawnPadManager.luau
-│   ├── SpawningMaster.luau
-│   ├── SpawningModule.luau
-│   ├── TankInput.luau
-│   ├── TankModuleScript.luau
-│   └── TeamManager.luau
-└── README.md
-```
+The scripts in this repository are selected from a larger game project. Some rely on the original game's instances, attributes, RemoteEvents, and asset hierarchy, so they are provided for code review rather than as standalone drop-in packages.
