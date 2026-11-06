@@ -18,12 +18,6 @@ My development process is based on identifying problems through implementation a
 
 This process is iterative. A proposed fix is not treated as correct until its behavior has been tested. For example, during vehicle suspension development, I investigated a tank-flipping issue by isolating the suspension and tracing physics network ownership across server-side systems. The investigation led to separating client-side suspension behavior from server-side validation.
 
-## Relevant Work — Gun Clan Systems
-
-For a focused breakdown of Land Warfare code relevant to weapon combat, server validation, persistent player data, progression, objectives, and multiplayer physics, see **[Relevant Systems — Gun Clan Role](Relevant-Work/Gun-Clan-Systems.md)**.
-
-The page includes selected code excerpts, links to their original source files, and a clear distinction between directly demonstrated systems and features that would still need to be built for an infantry FPS.
-
 ## AI-Assisted Workflow
 
 I use AI tools as coding and investigation assistance. I remain responsible for system design, evaluating suggestions, integrating changes into the project, testing behavior, identifying root causes, and refining the implementation. AI-generated suggestions are treated as hypotheses to verify, not as automatically correct solutions.
