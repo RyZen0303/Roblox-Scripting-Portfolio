@@ -1,43 +1,72 @@
 # RyZen — Full-Stack Roblox Developer
 
-I’m a **solo Roblox developer** who builds complete game experiences from the first gameplay concept to the systems running behind it.
+**Independent Roblox developer building complete gameplay systems across the client and server.**
 
-My work covers both sides of Roblox development: **client-side features and interfaces**, as well as **server-side gameplay logic, data handling, and system integration**. I enjoy connecting these parts into cohesive, playable experiences—not just scripting isolated features.
+I develop Roblox experiences end to end, combining gameplay programming, UI implementation, data systems, physics, and 3D asset integration. I work as a **solo developer**, handling the different parts of a project and connecting them into one functioning game.
 
-I work independently across the development process, taking responsibility for planning, implementation, integration, debugging, and testing. That includes writing Luau, building UI, working with 3D assets, and making sure separate systems function together.
-
-> **One developer. Full-stack ownership. Complete gameplay systems.**
+> **One developer. Full-stack capability. Complete game systems.**
 
 ---
 
-## What I Build
+## Core Capabilities
 
-### Full-Stack Roblox Development
+### Client-Side Development
+- Player input and interaction
+- Camera systems, aiming, and field-of-view control
+- Viewmodels and weapon presentation
+- HUDs and interactive user interfaces
+- Client-side effects and visual feedback
 
-- **Client-Side Development** — Player input, camera behavior, viewmodels, aiming, HUDs, and interactive interfaces.
-- **Server-Side Development** — Gameplay logic, authoritative state, spawning, damage handling, and server-side validation.
-- **Gameplay Systems** — Combat, weapons, projectiles, teams, player progression, and interconnected game mechanics.
-- **Data & Persistence** — DataStore integration, player data management, and persistent gameplay information.
-- **UI / UX Implementation** — Designing and scripting interfaces that communicate gameplay information clearly.
-- **Physics & Simulation** — Custom vehicle behavior, spherecast-based suspension, projectile movement, and collision handling.
-- **3D & Integration** — Working with models, assets, object hierarchies, and the connections between them.
+### Server-Side Development
+- Server-controlled gameplay logic
+- RemoteEvent communication between client and server
+- Player spawning and team management
+- Health, damage, and gameplay state handling
+- Server-side validation
 
-### Solo Development
+### Gameplay & Combat Systems
+- Weapon and firing systems
+- Projectile creation, movement, and collision
+- Combat mechanics and damage handling
+- Team-based gameplay
+- Connected gameplay features built from multiple scripts and modules
 
-I’m comfortable taking a feature from idea to implementation and handling the work needed to make it function in the wider game.
+### Data & Player Systems
+- DataStore integration
+- Player data management
+- Persistent player information
+- Connecting saved data with gameplay systems
 
-That means I can:
-- Break a gameplay idea into systems and implementation steps.
-- Build the client and server components required by a feature.
-- Connect scripts, RemoteEvents, data, UI, and in-game assets.
-- Investigate bugs across multiple systems instead of treating each script separately.
-- Test changes in context and refine them based on actual gameplay behavior.
+### Physics & Simulation
+- Custom vehicle physics
+- Spherecast-based suspension
+- Projectile movement and collision detection
+- Physics behavior and object interaction
+
+### UI, 3D & Game Integration
+- Gameplay HUD and menu implementation
+- UI behavior and player interaction
+- 3D model and asset integration
+- Connecting models, scripts, interfaces, and gameplay logic
+
+---
+
+## Full-Stack Solo Development
+
+I can take responsibility for a feature across the parts of a Roblox game it depends on—not only one isolated script.
+
+My development scope includes:
+- Planning and implementing gameplay features.
+- Building both client-side and server-side components.
+- Connecting scripts, modules, RemoteEvents, data, UI, and 3D assets.
+- Integrating individual systems into the existing game.
+- Delivering features as functional parts of a complete gameplay experience.
 
 ---
 
 ## Video Showcase
 
-These demonstrations highlight different parts of my development work, from complete gameplay experiences to individual technical systems.
+Demonstrations of my work across complete projects and individual development areas.
 
 ### 01 — Gameplay & Project Demonstration
 
@@ -81,36 +110,11 @@ https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
 ---
 
-## How I Approach Development
+## Tools & Technologies
 
-I focus on understanding how a feature behaves as part of the entire game.
-
-1. **Plan** — Define the intended behavior and identify the systems involved.
-2. **Trace** — Understand the relevant scripts, data flow, physics, and client-server communication.
-3. **Build** — Implement the required components and connect them to the existing game.
-4. **Debug** — Isolate the actual cause of problems and verify the behavior of connected systems.
-5. **Test** — Playtest, validate edge cases, and refine the implementation.
-
-For example, when investigating a vehicle-flipping issue, I isolated the suspension behavior and traced physics network ownership across server-side systems. The solution involved separating client-side suspension behavior from server-side validation. I approach problems by looking at how the systems interact, not just by changing the line where an error appears.
-
----
-
-## Development Tools & Workflow
-
-- **Luau** — Primary scripting language for Roblox development.
-- **Roblox Studio** — Gameplay implementation, UI, physics, asset integration, and testing.
-- **Git & GitHub** — Version control and project organization.
-- **AI-Assisted Development** — AI tools support coding and technical investigation. I evaluate suggestions, integrate the implementation, debug issues, and test the result rather than treating generated code as automatically correct.
-
-I’m transparent about using AI as part of my workflow. My focus is on understanding the systems I build, making sound implementation decisions, and being able to investigate and maintain the resulting code.
-
----
-
-## Working With Me
-
-As a solo developer, I can take ownership of a feature or a broader gameplay system without requiring separate client-side and server-side scripters.
-
-I value clear requirements, practical solutions, maintainable systems, and testing in the actual game environment. I’m interested in projects where I can contribute across the development stack and help turn ideas into working Roblox experiences.
+- **Luau** — Roblox gameplay and systems programming.
+- **Roblox Studio** — Scripting, UI implementation, physics, asset integration, and game development.
+- **Git & GitHub** — Source control and project management.
 
 ---
 
