@@ -1,120 +1,122 @@
-# Roblox Developer Portfolio
+# RyZen — Full-Stack Roblox Developer
 
-Roblox gameplay developer focused on building complete gameplay experiences and interconnected systems with **Luau**.
+I’m a **solo Roblox developer** who builds complete game experiences from the first gameplay concept to the systems running behind it.
 
-I independently developed **Land Warfare**, a tank-combat Roblox game, over approximately five months. I worked across the development process, including scripting, UI design, and modeling. I also have experience from previous freelance work.
+My work covers both sides of Roblox development: **client-side features and interfaces**, as well as **server-side gameplay logic, data handling, and system integration**. I enjoy connecting these parts into cohesive, playable experiences—not just scripting isolated features.
 
-This repository contains selected source code from my projects. The videos below provide a quick look at the systems in action.
+I work independently across the development process, taking responsibility for planning, implementation, integration, debugging, and testing. That includes writing Luau, building UI, working with 3D assets, and making sure separate systems function together.
+
+> **One developer. Full-stack ownership. Complete gameplay systems.**
+
+---
+
+## What I Build
+
+### Full-Stack Roblox Development
+
+- **Client-Side Development** — Player input, camera behavior, viewmodels, aiming, HUDs, and interactive interfaces.
+- **Server-Side Development** — Gameplay logic, authoritative state, spawning, damage handling, and server-side validation.
+- **Gameplay Systems** — Combat, weapons, projectiles, teams, player progression, and interconnected game mechanics.
+- **Data & Persistence** — DataStore integration, player data management, and persistent gameplay information.
+- **UI / UX Implementation** — Designing and scripting interfaces that communicate gameplay information clearly.
+- **Physics & Simulation** — Custom vehicle behavior, spherecast-based suspension, projectile movement, and collision handling.
+- **3D & Integration** — Working with models, assets, object hierarchies, and the connections between them.
+
+### Solo Development
+
+I’m comfortable taking a feature from idea to implementation and handling the work needed to make it function in the wider game.
+
+That means I can:
+- Break a gameplay idea into systems and implementation steps.
+- Build the client and server components required by a feature.
+- Connect scripts, RemoteEvents, data, UI, and in-game assets.
+- Investigate bugs across multiple systems instead of treating each script separately.
+- Test changes in context and refine them based on actual gameplay behavior.
 
 ---
 
 ## Video Showcase
 
-This section is designed to hold **at least 10 video demonstrations**. Add each video by uploading it to GitHub (or using a supported video-hosting link), then replace the placeholder note with its URL. For GitHub-uploaded videos, paste the uploaded video URL on its own line so GitHub can render the player in the README.
+These demonstrations highlight different parts of my development work, from complete gameplay experiences to individual technical systems.
 
-### 01 — Land Warfare: Gameplay Overview
+### 01 — Gameplay & Project Demonstration
 
-<!-- Replace or keep this video URL. -->
 https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
-### 02 — Vehicle & Suspension System
+### 02 — Client-Side Systems
 
 <!-- Paste video URL here. -->
 
-### 03 — Fire Control & Turret System
+### 03 — Server-Side Gameplay
 
 <!-- Paste video URL here. -->
 
-### 04 — Projectile & Hit Detection
+### 04 — Combat & Weapon Systems
 
 <!-- Paste video URL here. -->
 
-### 05 — DataStore & Player Data
+### 05 — Physics & Vehicle Systems
 
 <!-- Paste video URL here. -->
 
-### 06 — UI & HUD Systems
+### 06 — Data & Persistence
 
 <!-- Paste video URL here. -->
 
-### 07 — ADS / Viewmodel System
+### 07 — UI / HUD Development
 
 <!-- Paste video URL here. -->
 
-### 08 — Previous Freelance Project
+### 08 — Viewmodel, Camera & ADS
 
 <!-- Paste video URL here. -->
 
-### 09 — Additional Gameplay System
+### 09 — 3D Assets & Game Integration
 
 <!-- Paste video URL here. -->
 
-### 10 — Additional Project / Technical Demo
+### 10 — Additional Project / Technical Demonstration
 
 <!-- Paste video URL here. -->
 
 ---
 
-## Featured Project
+## How I Approach Development
 
-### Land Warfare
+I focus on understanding how a feature behaves as part of the entire game.
 
-An independently developed Roblox tank-combat game, built over approximately five months.
+1. **Plan** — Define the intended behavior and identify the systems involved.
+2. **Trace** — Understand the relevant scripts, data flow, physics, and client-server communication.
+3. **Build** — Implement the required components and connect them to the existing game.
+4. **Debug** — Isolate the actual cause of problems and verify the behavior of connected systems.
+5. **Test** — Playtest, validate edge cases, and refine the implementation.
 
-**Development contributions**
-- Gameplay scripting and interconnected game systems
-- UI design and implementation
-- 3D modeling
-- Custom spherecast-based vehicle suspension
-- Data persistence and player data handling
-- Vehicle combat features, including turret and projectile-related systems
-
-The project gave me experience developing and debugging systems as part of a complete game rather than treating each script as an isolated feature.
+For example, when investigating a vehicle-flipping issue, I isolated the suspension behavior and traced physics network ownership across server-side systems. The solution involved separating client-side suspension behavior from server-side validation. I approach problems by looking at how the systems interact, not just by changing the line where an error appears.
 
 ---
 
-## Technical Skills & Systems
+## Development Tools & Workflow
 
-The following are areas I have worked on through my projects:
+- **Luau** — Primary scripting language for Roblox development.
+- **Roblox Studio** — Gameplay implementation, UI, physics, asset integration, and testing.
+- **Git & GitHub** — Version control and project organization.
+- **AI-Assisted Development** — AI tools support coding and technical investigation. I evaluate suggestions, integrate the implementation, debug issues, and test the result rather than treating generated code as automatically correct.
 
-- **Gameplay Systems** — Core gameplay logic, spawning, teams, and match-related systems.
-- **Vehicle Systems** — Vehicle physics and custom spherecast-based suspension.
-- **Combat & Fire Control** — Turret rotation, aiming, firing, and weapon handling.
-- **Projectile Systems** — Projectile simulation and collision detection.
-- **Data Management** — DataStore integration and player data handling.
-- **UI Development** — HUD controllers, interfaces, and in-game UI systems.
-- **FPS / Viewmodel** — ADS, camera FOV adjustment, and viewmodel positioning.
-- **Client–Server Architecture** — Remote communication and server-side validation.
+I’m transparent about using AI as part of my workflow. My focus is on understanding the systems I build, making sound implementation decisions, and being able to investigate and maintain the resulting code.
 
 ---
 
-## Development Approach
+## Working With Me
 
-My workflow focuses on understanding how systems behave in-game, finding the cause of issues, and testing changes instead of assuming a fix is correct.
+As a solo developer, I can take ownership of a feature or a broader gameplay system without requiring separate client-side and server-side scripters.
 
-1. **Identify** — Reproduce the issue and determine which behavior is incorrect.
-2. **Investigate** — Trace the relevant scripts, data flow, physics behavior, and client-server interactions.
-3. **Isolate** — Test possible causes while reducing unrelated variables.
-4. **Implement** — Apply a solution while considering its effect on connected systems.
-5. **Validate** — Playtest the result and refine it if problems remain.
+I value clear requirements, practical solutions, maintainable systems, and testing in the actual game environment. I’m interested in projects where I can contribute across the development stack and help turn ideas into working Roblox experiences.
 
-For example, while developing vehicle suspension, I investigated a tank-flipping issue by isolating suspension behavior and tracing physics network ownership across server-side systems. This led to separating client-side suspension behavior from server-side validation.
-
-## AI-Assisted Development
-
-I use AI tools to assist with coding and technical investigation. I remain responsible for evaluating suggestions, understanding how the implementation fits into the project, integrating changes, debugging behavior, and testing the result.
-
-AI-generated suggestions are treated as hypotheses to verify, not as automatically correct solutions. This portfolio represents an AI-assisted development workflow; it is not a claim that every line of code was written without assistance.
-
-## Source Code
-
-The scripts in this repository are selected from larger game projects. Some depend on the original game's instances, attributes, RemoteEvents, and asset hierarchy, so they are provided for code review rather than as standalone drop-in packages.
-
-Browse the folders in this repository to inspect the implementations.
+---
 
 ## Contact
 
-- **Roblox Username:** Inoob_5546
+- **Roblox:** [Inoob_5546](https://www.roblox.com/users/)
 - **GitHub:** [RyZen0303](https://github.com/RyZen0303)
 
-For project inquiries, contact me through Roblox or GitHub.
+For project inquiries, feel free to reach out through GitHub or Roblox.
