@@ -1,29 +1,120 @@
-# Roblox Gameplay Scripting Portfolio
+# RyZen — Roblox Developer Portfolio
 
-Selected gameplay systems from **Land Warfare**, an independently developed and playable Roblox game.
+Roblox gameplay developer focused on building complete gameplay experiences and interconnected systems with **Luau**.
 
-## Gameplay Showcase
+I independently developed **Land Warfare**, a tank-combat Roblox game, over approximately five months. I worked across the development process, including scripting, UI design, and modeling. I also have experience from previous freelance work.
 
+This repository contains selected source code from my projects. The videos below provide a quick look at the systems in action.
+
+---
+
+## Video Showcase
+
+This section is designed to hold **at least 10 video demonstrations**. Add each video by uploading it to GitHub (or using a supported video-hosting link), then replace the placeholder note with its URL. For GitHub-uploaded videos, paste the uploaded video URL on its own line so GitHub can render the player in the README.
+
+### 01 — Land Warfare: Gameplay Overview
+
+<!-- Replace or keep this video URL. -->
 https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
-## Development Process
+### 02 — Vehicle & Suspension System
 
-My development process is based on identifying problems through implementation and playtesting, investigating their causes, and validating solutions in the actual game.
+<!-- Paste video URL here. -->
 
-1. **Identify the problem** — Implement or playtest a feature, observe unexpected behavior, and define the specific issue.
-2. **Investigate the cause** — Inspect script behavior, output logs, relevant Roblox systems, and interactions between components. I form and test possible explanations rather than assuming the first suggestion is correct.
-3. **Isolate and test** — Reduce unrelated variables where possible, use debugging output or temporary changes, and test hypotheses against the behavior in-game.
-4. **Implement the solution** — Make changes based on the cause identified, while considering how the affected systems interact with the rest of the project.
-5. **Validate and refine** — Playtest the result, check relevant edge cases and supported devices, and revise the implementation if problems remain.
+### 03 — Fire Control & Turret System
 
-This process is iterative. A proposed fix is not treated as correct until its behavior has been tested. For example, during vehicle suspension development, I investigated a tank-flipping issue by isolating the suspension and tracing physics network ownership across server-side systems. The investigation led to separating client-side suspension behavior from server-side validation.
+<!-- Paste video URL here. -->
 
-## AI-Assisted Workflow
+### 04 — Projectile & Hit Detection
 
-I use AI tools as coding and investigation assistance. I remain responsible for system design, evaluating suggestions, integrating changes into the project, testing behavior, identifying root causes, and refining the implementation. AI-generated suggestions are treated as hypotheses to verify, not as automatically correct solutions.
+<!-- Paste video URL here. -->
 
-This is an AI-assisted development workflow, not a claim that every line was written without assistance.
+### 05 — DataStore & Player Data
 
-## Code Context
+<!-- Paste video URL here. -->
 
-The scripts in this repository are selected from a larger game project. Some rely on the original game's instances, attributes, RemoteEvents, and asset hierarchy, so they are provided for code review rather than as standalone drop-in packages.
+### 06 — UI & HUD Systems
+
+<!-- Paste video URL here. -->
+
+### 07 — ADS / Viewmodel System
+
+<!-- Paste video URL here. -->
+
+### 08 — Previous Freelance Project
+
+<!-- Paste video URL here. -->
+
+### 09 — Additional Gameplay System
+
+<!-- Paste video URL here. -->
+
+### 10 — Additional Project / Technical Demo
+
+<!-- Paste video URL here. -->
+
+---
+
+## Featured Project
+
+### Land Warfare
+
+An independently developed Roblox tank-combat game, built over approximately five months.
+
+**Development contributions**
+- Gameplay scripting and interconnected game systems
+- UI design and implementation
+- 3D modeling
+- Custom spherecast-based vehicle suspension
+- Data persistence and player data handling
+- Vehicle combat features, including turret and projectile-related systems
+
+The project gave me experience developing and debugging systems as part of a complete game rather than treating each script as an isolated feature.
+
+---
+
+## Technical Skills & Systems
+
+The following are areas I have worked on through my projects:
+
+- **Gameplay Systems** — Core gameplay logic, spawning, teams, and match-related systems.
+- **Vehicle Systems** — Vehicle physics and custom spherecast-based suspension.
+- **Combat & Fire Control** — Turret rotation, aiming, firing, and weapon handling.
+- **Projectile Systems** — Projectile simulation and collision detection.
+- **Data Management** — DataStore integration and player data handling.
+- **UI Development** — HUD controllers, interfaces, and in-game UI systems.
+- **FPS / Viewmodel** — ADS, camera FOV adjustment, and viewmodel positioning.
+- **Client–Server Architecture** — Remote communication and server-side validation.
+
+---
+
+## Development Approach
+
+My workflow focuses on understanding how systems behave in-game, finding the cause of issues, and testing changes instead of assuming a fix is correct.
+
+1. **Identify** — Reproduce the issue and determine which behavior is incorrect.
+2. **Investigate** — Trace the relevant scripts, data flow, physics behavior, and client-server interactions.
+3. **Isolate** — Test possible causes while reducing unrelated variables.
+4. **Implement** — Apply a solution while considering its effect on connected systems.
+5. **Validate** — Playtest the result and refine it if problems remain.
+
+For example, while developing vehicle suspension, I investigated a tank-flipping issue by isolating suspension behavior and tracing physics network ownership across server-side systems. This led to separating client-side suspension behavior from server-side validation.
+
+## AI-Assisted Development
+
+I use AI tools to assist with coding and technical investigation. I remain responsible for evaluating suggestions, understanding how the implementation fits into the project, integrating changes, debugging behavior, and testing the result.
+
+AI-generated suggestions are treated as hypotheses to verify, not as automatically correct solutions. This portfolio represents an AI-assisted development workflow; it is not a claim that every line of code was written without assistance.
+
+## Source Code
+
+The scripts in this repository are selected from larger game projects. Some depend on the original game's instances, attributes, RemoteEvents, and asset hierarchy, so they are provided for code review rather than as standalone drop-in packages.
+
+Browse the folders in this repository to inspect the implementations.
+
+## Contact
+
+- **Roblox:** [Inoob_5546](https://www.roblox.com/users/USERNAME/profile)
+- **GitHub:** [RyZen0303](https://github.com/RyZen0303)
+
+For project inquiries, contact me through Roblox or GitHub.
