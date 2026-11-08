@@ -1,4 +1,4 @@
-# RyZen — Roblox Developer Portfolio
+# Roblox Developer Portfolio
 
 Roblox gameplay developer focused on building complete gameplay experiences and interconnected systems with **Luau**.
 
