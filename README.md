@@ -66,7 +66,9 @@ My development scope includes:
 
 ## Video Showcase
 
-Demonstrations of my work across complete projects and individual development areas.
+Demonstrations of my work across complete projects and individual development areas. 
+
+## IF THE VIDEO DOESN'T PLAY, PRESS CTRL + R
 
 ### 01 — Gameplay & Project Demonstration
 
