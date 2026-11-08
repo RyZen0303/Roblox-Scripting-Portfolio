@@ -72,27 +72,27 @@ Demonstrations of my work across complete projects and individual development ar
 
 https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
-### 02 — Client-Side Systems
+### 02 — Autonomous NPC Combat AI & Battlefield Navigation
 
 <!-- Paste video URL here. -->
 
-### 03 — Server-Side Gameplay
+### 03 — Advanced Ballistics & Server-Side Projectile Simulation
 
 <!-- Paste video URL here. -->
 
-### 04 — Combat & Weapon Systems
+### 04 — Networked Turret Control & Vehicle Weapon Handling
 
 <!-- Paste video URL here. -->
 
-### 05 — Physics & Vehicle Systems
+### 05 — Physics-Driven Vehicle Systems & Suspension
 
 https://github.com/user-attachments/assets/54323a0a-1a6b-4b0b-9e0c-42458ce9198a
 
-### 06 — Data & Persistence
+### 06 — Faction Warfare, Capture Zones & Base Objectives
 
 <!-- Paste video URL here. -->
 
-### 07 — UI / HUD Development
+### 07 — Server-Authoritative Damage & Combat Validation
 
 <!-- Paste video URL here. -->
 
@@ -100,11 +100,11 @@ https://github.com/user-attachments/assets/54323a0a-1a6b-4b0b-9e0c-42458ce9198a
 
 https://github.com/user-attachments/assets/aa7312ad-89d2-4704-9cd3-e3130ce79d63
 
-### 09 — 3D Assets & Game Integration
+### 09 — Persistent Player Progression & DataStore Architecture
 
 <!-- Paste video URL here. -->
 
-### 10 — Additional Project / Technical Demonstration
+### 10 — Engineering Problem-Solving & System Optimization
 
 <!-- Paste video URL here. -->
 
