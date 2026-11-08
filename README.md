@@ -114,7 +114,7 @@ Browse the folders in this repository to inspect the implementations.
 
 ## Contact
 
-- **Roblox:** [Inoob_5546](https://www.roblox.com/users/USERNAME/profile)
+- **Roblox Username:** Inoob_5546
 - **GitHub:** [RyZen0303](https://github.com/RyZen0303)
 
 For project inquiries, contact me through Roblox or GitHub.
