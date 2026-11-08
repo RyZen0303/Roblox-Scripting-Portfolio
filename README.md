@@ -116,7 +116,7 @@ I value clear requirements, practical solutions, maintainable systems, and testi
 
 ## Contact
 
-- **Roblox:** [Inoob_5546](https://www.roblox.com/users/)
+- **Roblox Username:** `Inoob_5546`
 - **GitHub:** [RyZen0303](https://github.com/RyZen0303)
 
 For project inquiries, feel free to reach out through GitHub or Roblox.
