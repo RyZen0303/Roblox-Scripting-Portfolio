@@ -60,8 +60,8 @@ end
 -- Calculate CFrame Offset between AimPart and Gun Body/Handle
 local function getAimOffset(vm: Model): CFrame
 	local aimPart = vm:FindFirstChild("AimPart", true) :: BasePart?
-	local primaryPart: BasePart? = vm.PrimaryPart
-		or (vm:FindFirstChild("Body", true) :: BasePart?)
+	local primaryPart: BasePart? = vm.PrimaryPart 
+		or (vm:FindFirstChild("Body", true) :: BasePart?) 
 		or (vm:FindFirstChild("Handle", true) :: BasePart?)
 
 	if aimPart and primaryPart then

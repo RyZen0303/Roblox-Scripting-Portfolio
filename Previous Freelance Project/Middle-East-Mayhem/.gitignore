@@ -1,0 +1,29 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# VS Code and Editor Settings
+.vscode/
+.idea/
+*.swp
+*.bak
+*.code-workspace
+
+# Sensitive Information and Secrets
+.env
+*.env
+*.pem
+*.key
+*_token.txt
+
+# Roblox and Rojo Artifacts
+*.rbxl.lock
+*.rbxlx.lock
+sourcemap.json
+*.log
