@@ -68,7 +68,8 @@ My development scope includes:
 
 Demonstrations of my work across complete projects and individual development areas. 
 
-## IF THE VIDEO DOESN'T PLAY, PRESS CTRL + R
+> [!WARNING]
+> **IF THE VIDEO DOESN'T PLAY, PRESS `CTRL + R`**
 
 ### 01 — Gameplay & Project Demonstration
 
