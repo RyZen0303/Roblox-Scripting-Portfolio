@@ -104,7 +104,7 @@ https://github.com/user-attachments/assets/aa7312ad-89d2-4704-9cd3-e3130ce79d63
 
 ### 09 — Player Data Saving & Loading
 
-<!-- Paste video URL here. -->
+https://github.com/user-attachments/assets/bbd83697-1c7f-41c5-883f-3abcf94796ac
 
 ### 10 — NPC Targeting & Combat Behavior
 
