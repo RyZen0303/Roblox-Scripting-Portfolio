@@ -72,15 +72,15 @@ Demonstrations of my work across complete projects and individual development ar
 
 https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
-### 02 — Autonomous NPC Combat AI & Battlefield Navigation
+### 02 — Mobile Controls & Touch Interface
 
 <!-- Paste video URL here. -->
 
-### 03 — Advanced Ballistics & Server-Side Projectile Simulation
+### 03 — Weapon Firing & Projectile Impact
 
 <!-- Paste video URL here. -->
 
-### 04 — Networked Turret Control & Vehicle Weapon Handling
+### 04 — In-Game HUD & Combat Interface
 
 <!-- Paste video URL here. -->
 
@@ -88,11 +88,11 @@ https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
 https://github.com/user-attachments/assets/54323a0a-1a6b-4b0b-9e0c-42458ce9198a
 
-### 06 — Faction Warfare, Capture Zones & Base Objectives
+### 06 — Team Selection & Player Spawning
 
 <!-- Paste video URL here. -->
 
-### 07 — Server-Authoritative Damage & Combat Validation
+### 07 — Vehicle Damage & Health Feedback
 
 <!-- Paste video URL here. -->
 
@@ -100,11 +100,11 @@ https://github.com/user-attachments/assets/54323a0a-1a6b-4b0b-9e0c-42458ce9198a
 
 https://github.com/user-attachments/assets/aa7312ad-89d2-4704-9cd3-e3130ce79d63
 
-### 09 — Persistent Player Progression & DataStore Architecture
+### 09 — Player Data Saving & Loading
 
 <!-- Paste video URL here. -->
 
-### 10 — Engineering Problem-Solving & System Optimization
+### 10 — NPC Targeting & Combat Behavior
 
 <!-- Paste video URL here. -->
 
