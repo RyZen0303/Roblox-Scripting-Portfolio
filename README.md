@@ -98,7 +98,7 @@ https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
 ### 08 — Viewmodel, Camera & ADS
 
-<!-- Paste video URL here. -->
+https://github.com/user-attachments/assets/aa7312ad-89d2-4704-9cd3-e3130ce79d63
 
 ### 09 — 3D Assets & Game Integration
 
