@@ -102,9 +102,10 @@ https://github.com/user-attachments/assets/afefb179-7852-4981-97dd-2f21d3d5ea6f
 
 ### 06 — Team Selection & Player Spawning
 
-<!-- Recording: Show the team-selection screen, choose one team, and let the clip end after the character spawns. -->
+> [!NOTE]
+> **If the points have been captured, player will be able to spawn at different location (A,B,C) according to what points their team hold.**
 
-<!-- Paste video URL here. -->
+https://github.com/user-attachments/assets/1647a568-8cd7-4b50-94de-d0b607290610
 
 ### 07 — Vehicle Damage & Health Feedback
 
