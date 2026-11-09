@@ -143,5 +143,6 @@ https://github.com/user-attachments/assets/bbd83697-1c7f-41c5-883f-3abcf94796ac
 
 - **Roblox Username:** `Inoob_5546`
 - **GitHub:** [RyZen0303](https://github.com/RyZen0303)
+- **Email:** 'raweroj2552@gmail.com'
 
 For project inquiries, feel free to reach out through GitHub or Roblox.
