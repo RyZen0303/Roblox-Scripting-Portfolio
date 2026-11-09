@@ -112,6 +112,9 @@ https://github.com/user-attachments/assets/afefb179-7852-4981-97dd-2f21d3d5ea6f
 
 ### 08 — Viewmodel, Camera & ADS
 
+> [!NOTE]
+> **This one is my first freelance work.**
+
 https://github.com/user-attachments/assets/aa7312ad-89d2-4704-9cd3-e3130ce79d63
 
 ### 09 — Player Data Saving & Loading
