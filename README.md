@@ -1,10 +1,12 @@
 # RyZen — Full-Stack Roblox Developer
 
-**Independent Roblox developer building complete gameplay systems across the client and server.**
+> **I build gameplay systems that work together—not just standalone scripts.**
 
-I develop Roblox experiences end to end, combining gameplay programming, UI implementation, data systems, physics, and 3D asset integration. I work as a **solo developer**, handling the different parts of a project and connecting them into one functioning game.
+Independent Roblox developer focused on end-to-end implementation, from client/server logic and gameplay systems to UI, data, physics, and asset integration.
 
-> **One developer. Full-stack capability. Complete game systems.**
+**Focus:** `Luau` · `Gameplay Systems` · `Client–Server Architecture` · `System Integration`
+
+[Video Showcase](#video-showcase) · [Core Capabilities](#core-capabilities) · [Contact](#contact)
 
 ---
 
