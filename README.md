@@ -77,7 +77,7 @@ https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
 ### 02 — Mobile Controls & Touch Interface
 
-<!-- Paste video URL here. -->
+https://github.com/user-attachments/assets/7698f92b-146f-45d3-b099-960d38dcb6da
 
 ### 03 — Weapon Firing & Projectile Impact
 
