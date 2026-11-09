@@ -77,6 +77,9 @@ Demonstrations of my work across complete projects and individual development ar
 
 ### 01 — Gameplay & Project Demonstration
 
+> [!NOTE]
+> **This gameplay showcase features the NPC system, capture-point mechanics, and projectile system with Raycast-based parallax error correction.**
+
 https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
 ---
@@ -87,23 +90,7 @@ https://github.com/user-attachments/assets/7698f92b-146f-45d3-b099-960d38dcb6da
 
 ---
 
-### 03 — Weapon Firing & Projectile Impact
-
-<!-- Recording: In one short take, fire at a stationary target and capture the projectile hit/impact. No code view or special setup needed. -->
-
-<!-- Paste video URL here. -->
-
----
-
-### 04 — In-Game HUD & Combat Interface
-
-<!-- Recording: Record a short normal gameplay segment with the HUD visible while aiming, firing, and checking the health/ammo display. -->
-
-<!-- Paste video URL here. -->
-
----
-
-### 05 — Physics-Driven Vehicle Systems & Suspension
+### 03 — Physics-Driven Vehicle Systems & Suspension
 
 > [!NOTE]
 > **The system that's showing is a Spherecast Suspension system.**
@@ -112,7 +99,7 @@ https://github.com/user-attachments/assets/afefb179-7852-4981-97dd-2f21d3d5ea6f
 
 ---
 
-### 06 — Team Selection & Player Spawning
+### 04 — Team Selection & Player Spawning
 
 > [!NOTE]
 > **If the points have been captured, player will be able to spawn at different location (A,B,C) according to what points their team hold.**
@@ -121,15 +108,7 @@ https://github.com/user-attachments/assets/1647a568-8cd7-4b50-94de-d0b607290610
 
 ---
 
-### 07 — Vehicle Damage & Health Feedback
-
-<!-- Recording: Show the vehicle before and after taking damage, with its health/damage feedback visible. One damage event is enough. -->
-
-<!-- Paste video URL here. -->
-
----
-
-### 08 — Viewmodel, Camera & ADS
+### 05 — Viewmodel, Camera & ADS
 
 > [!NOTE]
 > **This one is my first freelance work.**
@@ -138,17 +117,9 @@ https://github.com/user-attachments/assets/aa7312ad-89d2-4704-9cd3-e3130ce79d63
 
 ---
 
-### 09 — Player Data Saving & Loading
+### 06 — Player Data Saving & Loading
 
 https://github.com/user-attachments/assets/bbd83697-1c7f-41c5-883f-3abcf94796ac
-
----
-
-### 10 — NPC Targeting & Combat Behavior
-
-<!-- Recording: Place the player within the NPC's detection range and record the NPC noticing, targeting, and attacking. A single clear encounter is enough. -->
-
-<!-- Paste video URL here. -->
 
 ---
 
