@@ -73,13 +73,19 @@ Demonstrations of my work across complete projects and individual development ar
 > [!WARNING]
 > **IF THE VIDEO DOESN'T PLAY, PRESS `CTRL + R`**
 
+---
+
 ### 01 — Gameplay & Project Demonstration
 
 https://github.com/user-attachments/assets/99c36c64-ab07-4a4f-b8c8-8a21a72f0f06
 
+---
+
 ### 02 — Mobile Controls & Touch Interface
 
 https://github.com/user-attachments/assets/7698f92b-146f-45d3-b099-960d38dcb6da
+
+---
 
 ### 03 — Weapon Firing & Projectile Impact
 
@@ -87,11 +93,15 @@ https://github.com/user-attachments/assets/7698f92b-146f-45d3-b099-960d38dcb6da
 
 <!-- Paste video URL here. -->
 
+---
+
 ### 04 — In-Game HUD & Combat Interface
 
 <!-- Recording: Record a short normal gameplay segment with the HUD visible while aiming, firing, and checking the health/ammo display. -->
 
 <!-- Paste video URL here. -->
+
+---
 
 ### 05 — Physics-Driven Vehicle Systems & Suspension
 
@@ -100,6 +110,8 @@ https://github.com/user-attachments/assets/7698f92b-146f-45d3-b099-960d38dcb6da
 
 https://github.com/user-attachments/assets/afefb179-7852-4981-97dd-2f21d3d5ea6f
 
+---
+
 ### 06 — Team Selection & Player Spawning
 
 > [!NOTE]
@@ -107,11 +119,15 @@ https://github.com/user-attachments/assets/afefb179-7852-4981-97dd-2f21d3d5ea6f
 
 https://github.com/user-attachments/assets/1647a568-8cd7-4b50-94de-d0b607290610
 
+---
+
 ### 07 — Vehicle Damage & Health Feedback
 
 <!-- Recording: Show the vehicle before and after taking damage, with its health/damage feedback visible. One damage event is enough. -->
 
 <!-- Paste video URL here. -->
+
+---
 
 ### 08 — Viewmodel, Camera & ADS
 
@@ -120,9 +136,13 @@ https://github.com/user-attachments/assets/1647a568-8cd7-4b50-94de-d0b607290610
 
 https://github.com/user-attachments/assets/aa7312ad-89d2-4704-9cd3-e3130ce79d63
 
+---
+
 ### 09 — Player Data Saving & Loading
 
 https://github.com/user-attachments/assets/bbd83697-1c7f-41c5-883f-3abcf94796ac
+
+---
 
 ### 10 — NPC Targeting & Combat Behavior
 
