@@ -94,7 +94,7 @@ https://github.com/user-attachments/assets/7698f92b-146f-45d3-b099-960d38dcb6da
 ### 05 — Physics-Driven Vehicle Systems & Suspension
 
 > [!NOTE]
-> **This vehicle uses a Spherecast Suspension system.**
+> **The system that's showing is a Spherecast Suspension system.**
 
 https://github.com/user-attachments/assets/afefb179-7852-4981-97dd-2f21d3d5ea6f
 
