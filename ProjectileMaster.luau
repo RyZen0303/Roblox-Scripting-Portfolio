@@ -17,46 +17,44 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
-local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 
 -- Connected remote and bindables events those stay inside ReplicatedStorage
 local Events = ReplicatedStorage:WaitForChild("Events")
-local FireEvent = Events:WaitForChild("FireEvent")
-local RenderBulletEvent = Events:WaitForChild("RenderBullet")
+local FireEvent = Events:WaitForChild("FireEvent") :: RemoteEvent
+local RenderBulletEvent = Events:WaitForChild("RenderBullet") :: RemoteEvent
 local DebugRejectEvent = Events:FindFirstChild("DebugRejectEvent") or Instance.new("RemoteEvent", Events) -- Use to detect the cause for firing rejection as a debug (No longer implement on real game)
-DebugRejectEvent.Name = "DebugRejectEvent" 
-
-local ProcessDamage = ServerStorage:WaitForChild("Events"):WaitForChild("ProcessDamage") -- Send damage to process to another script
+DebugRejectEvent.Name = "DebugRejectEvent"
+local ProcessDamage = ServerStorage:WaitForChild("Events"):WaitForChild("ProcessDamage") :: BindableEvent -- Send damage to process to another script
 
 local reloadingTanks: {[Instance]: boolean} = {} -- Empty the table to hold reloadTime
 
 -- Helper function to dispatch debug messages to client
-local function notifyReject(player, reason)
+local function notifyReject(player: Player, reason: string): ()
 	warn(" [FIRE REJECTED]: " .. player.Name .. " -> " .. reason)
 	DebugRejectEvent:FireClient(player, " Firing Rejected: " .. reason)
 end
 
 -- [[ CORE BALLISTICS ENGINE ]]
-local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLookDirection, attackerPlayer)
+local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3, clientMuzzlePos: Vector3?, clientLookDirection: Vector3?, attackerPlayer: Player?): ()
 	local baseDamage = weaponPart:GetAttribute("Damage") or 140
 	local blastRadius = weaponPart:GetAttribute("BlastRadius") or 10
 	local damageType = "Heavy"
 	local muzzleVelocity = weaponPart:GetAttribute("MuzzleVelocity") or 800
 	local soundName = weaponPart:GetAttribute("SoundName") or "cannon_fire"
-	local isExplosive = weaponPart:GetAttribute("IsExplosive")
+	local isExplosive = weaponPart:GetAttribute("IsExplosive") == true
 	local gravityMultiplier = 0.9
 
 	local cannon = weaponPart:FindFirstChild("Cannon", true) or weaponPart
-	if not cannon then
+	local muzzle = cannon:FindFirstChild("Muzzle") or cannon
+
+	if not muzzle:IsA("BasePart") then
 		if attackerPlayer then
-			notifyReject(attackerPlayer, "Cannon part missing on weapon model")
+			notifyReject(attackerPlayer, "Muzzle part missing or invalid on weapon model")
 		end
 		return
 	end
-
-	local muzzle = cannon:FindFirstChild("Muzzle") or cannon -- Location use as a bullet spawn point 
 
 	-- Use client muzzle position if provided, fallback to server muzzle position
 	local spawnOrigin = clientMuzzlePos or muzzle.Position
@@ -64,11 +62,15 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 	-- Preserve exact client look direction without modifying any axis
 	local projectileDirection = (clientLookDirection and clientLookDirection.Magnitude > 0)
 		and clientLookDirection.Unit
-		or (aimPoint - spawnOrigin).Unit --use aimPoint as a fallback if clientLookDirection is not provided
+		or (aimPoint - spawnOrigin).Unit
+
+	if projectileDirection.Magnitude == 0 then
+		projectileDirection = muzzle.CFrame.LookVector
+	end
 
 	-- Prevent inverse vector calculation when muzzle overlaps target geometry
 	if clientLookDirection and clientLookDirection.Magnitude > 0 then
-		local rawVector = (aimPoint - spawnOrigin)
+		local rawVector = aimPoint - spawnOrigin
 		if rawVector.Magnitude > 0 and clientLookDirection.Unit:Dot(rawVector.Unit) < 0 then -- This line check if overlap occurs
 			projectileDirection = clientLookDirection.Unit
 		end
@@ -99,7 +101,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 
 	bullet.Parent = workspace
 	bullet.CFrame = CFrame.lookAt(finalSpawnPos, finalSpawnPos + projectileDirection)
-	pcall(function() bullet:SetNetworkOwner(nil) end)
+	pcall(function(): () bullet:SetNetworkOwner(nil) end)
 
 	-- Reduce gravity force for better bullet fall
 	local gravityReducer = Instance.new("VectorForce")
@@ -119,8 +121,9 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 
 	-- Play localized audio (Unfixed yet, better located at BulletVisualManager)
 	local assets = ReplicatedStorage:FindFirstChild("Assets")
-	local fireSound = assets and assets.Sounds:FindFirstChild(soundName)
-	if fireSound then
+	local sounds = assets and assets:FindFirstChild("Sounds")
+	local fireSound = sounds and sounds:FindFirstChild(soundName)
+	if fireSound and fireSound:IsA("Sound") then
 		local sfx = fireSound:Clone()
 		sfx.Parent = cannon
 		sfx.Volume = 5.0
@@ -131,7 +134,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 
 	-- Procedural recoil animation override using motor6D on tank's model
 	local recoilJoint = cannon:FindFirstChild("RecoilJoint")
-	if recoilJoint then
+	if recoilJoint and recoilJoint:IsA("Motor6D") then
 		local originalC0 = recoilJoint.C0
 		local infoRetract = TweenInfo.new(0.05, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		local infoReturn = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
@@ -139,8 +142,10 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 
 		local tweenRetract = TweenService:Create(recoilJoint, infoRetract, {C0 = targetC0})
 		tweenRetract:Play()
-		tweenRetract.Completed:Connect(function()
-			TweenService:Create(recoilJoint, infoReturn, {C0 = originalC0}):Play()
+		tweenRetract.Completed:Connect(function(): ()
+			if recoilJoint.Parent then
+				TweenService:Create(recoilJoint, infoReturn, {C0 = originalC0}):Play()
+			end
 		end)
 	end
 
@@ -156,15 +161,14 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 
 	local lastPosition = bullet.Position
 	local connection
-	connection = RunService.Heartbeat:Connect(function(dt)
-		if not bullet or not bullet.Parent then
+	connection = RunService.Heartbeat:Connect(function(dt: number): ()
+		if not bullet.Parent then
 			if connection then connection:Disconnect() end
 			return
 		end
 
-		-- Wake up physics if stalled by network ownership handoff
+		-- Restore velocity if physics stalls
 		if bullet.AssemblyLinearVelocity.Magnitude < 10 then
-			bullet:WakeUp()
 			bullet.AssemblyLinearVelocity = finalVelocity
 		end
 
@@ -174,7 +178,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 		local totalTravelDistance = (currentPosition - finalSpawnPos).Magnitude
 		if totalTravelDistance > 800 then
 			local enemyShield = (tankTeam == "Germany") and britainShield or germanyShield
-			if enemyShield and (currentPosition - enemyShield.Position).Magnitude <= 300 then
+			if enemyShield and enemyShield:IsA("BasePart") and (currentPosition - enemyShield.Position).Magnitude <= 300 then
 				connection:Disconnect()
 				RenderBulletEvent:FireAllClients("DestroyVisual", bulletId)
 
@@ -203,8 +207,9 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 			local hitInstance = raycastResult.Instance
 
 			-- Dynamic bush penetration filter
-			if hitInstance.Name == "Bush" or (hitInstance.Parent and hitInstance.Parent.Name == "Bush") then
-				raycastParams:AddToFilter(hitInstance)
+			local bush = hitInstance.Name == "Bush" and hitInstance or hitInstance:FindFirstAncestor("Bush")
+			if bush then
+				raycastParams:AddToFilter(bush)
 				return
 			end
 
@@ -221,7 +226,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 
 			local hitCharacter = hitInstance:FindFirstAncestorOfClass("Model")
 			local targetHumanoid = hitCharacter and hitCharacter:FindFirstChildOfClass("Humanoid")
-			if targetHumanoid and not hitCharacter:GetAttribute("Health") then
+			if targetHumanoid and hitCharacter:GetAttribute("Health") == nil then
 				targetHumanoid:TakeDamage(baseDamage)
 			else
 				ProcessDamage:Fire(hitInstance, baseDamage, damageType, attackerPlayer, weaponPart)
@@ -235,11 +240,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 end
 
 -- Shared weapon reload routine
-local function reloadWeapon(
-	weapon: Instance,
-	tankModel: Model,
-	defaultReload: number
-): ()
+local function reloadWeapon(weapon: Instance, tankModel: Model, defaultReload: number): ()
 	local maxReload = weapon:GetAttribute("ReloadTime") or defaultReload
 	tankModel:SetAttribute("MaxReloadTime", maxReload)
 
@@ -259,12 +260,27 @@ FireEvent.OnServerEvent:Connect(function(
 	aimPoint: Vector3,
 	clientMuzzlePos: Vector3?,
 	clientLookDirection: Vector3?
-)
+): ()
+	if typeof(weaponName) ~= "string" or typeof(aimPoint) ~= "Vector3" then
+		notifyReject(player, "Invalid firing request arguments.")
+		return
+	end
+
+	if clientMuzzlePos ~= nil and typeof(clientMuzzlePos) ~= "Vector3" then
+		notifyReject(player, "Invalid muzzle position.")
+		return
+	end
+
+	if clientLookDirection ~= nil and typeof(clientLookDirection) ~= "Vector3" then
+		notifyReject(player, "Invalid projectile direction.")
+		return
+	end
+
 	local char = player.Character
 	local humanoid = char and char:FindFirstChildOfClass("Humanoid")
 
 	-- Primary Seat Validation
-	local seat = (humanoid and humanoid.SeatPart)
+	local seat = humanoid and humanoid.SeatPart
 
 	-- Secondary Fallback: Weld inspection for network desync resilience
 	if not seat and char and char:FindFirstChild("HumanoidRootPart") then
@@ -320,7 +336,7 @@ FireEvent.OnServerEvent:Connect(function(
 
 	-- Execute fire routine within protected call to guarantee state cleanup
 	reloadingTanks[weapon] = true
-	local success, err = pcall(function()
+	local success, err = pcall(function(): ()
 		firing(weapon, tankModel, aimPoint, clientMuzzlePos, clientLookDirection, player)
 		reloadWeapon(weapon, tankModel, 3)
 	end)
@@ -333,7 +349,7 @@ FireEvent.OnServerEvent:Connect(function(
 end)
 
 -- [[ NPC AUTOMATIC FIRING INTEGRATION ]]
-task.spawn(function()
+task.spawn(function(): ()
 	while true do
 		task.wait(0.1)
 
@@ -342,19 +358,30 @@ task.spawn(function()
 				local shouldFire = tankModel:GetAttribute("AIFireCommand")
 				local targetPos = tankModel:GetAttribute("AITargetPosition")
 
-				if shouldFire and targetPos then
-					local weapon = tankModel:FindFirstChild("Cannon", true) or tankModel:FindFirstChildOfClass("BasePart")
+				if shouldFire and typeof(targetPos) == "Vector3" then
+					local weapon = tankModel:FindFirstChild("Cannon", true) or tankModel:FindFirstChildWhichIsA("BasePart", true)
 
 					if weapon and not reloadingTanks[weapon] then
 						reloadingTanks[weapon] = true
 
-						task.spawn(function()
+						task.spawn(function(): ()
 							local cannon = weapon:FindFirstChild("Cannon", true) or weapon
 							local muzzle = cannon:FindFirstChild("Muzzle") or cannon
-							local spawnPos = muzzle.Position
-							local fireDir = (targetPos - spawnPos).Unit
 
-							local success, err = pcall(function()
+							if not muzzle:IsA("BasePart") then
+								reloadingTanks[weapon] = nil
+								return
+							end
+
+							local spawnPos = muzzle.Position
+							local fireDir = targetPos - spawnPos
+							if fireDir.Magnitude > 0 then
+								fireDir = fireDir.Unit
+							else
+								fireDir = muzzle.CFrame.LookVector
+							end
+
+							local success, err = pcall(function(): ()
 								firing(weapon, tankModel, targetPos, spawnPos, fireDir, nil)
 								reloadWeapon(weapon, tankModel, 4)
 							end)
