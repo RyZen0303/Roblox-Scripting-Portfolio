@@ -68,14 +68,6 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 		projectileDirection = muzzle.CFrame.LookVector
 	end
 
-	-- Prevent inverse vector calculation when muzzle overlaps target geometry
-	if clientLookDirection and clientLookDirection.Magnitude > 0 then
-		local rawVector = aimPoint - spawnOrigin
-		if rawVector.Magnitude > 0 and clientLookDirection.Unit:Dot(rawVector.Unit) < 0 then -- This line check if overlap occurs
-			projectileDirection = clientLookDirection.Unit
-		end
-	end
-
 	-- If overlap true, push spawn origin forward along projectile direction to as a prevention when muzzle clipping
 	local safetyParams = RaycastParams.new()
 	safetyParams.FilterType = Enum.RaycastFilterType.Exclude
