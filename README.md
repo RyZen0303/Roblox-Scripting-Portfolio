@@ -2,15 +2,17 @@
 
 > **Everything showcased in this portfolio is the work of one person: me.**
 
-I independently handled the work behind these showcases—there is no separate team of scripters, VFX artists, or modelers responsible for the results shown here. I work across all three disciplines myself:
+I independently handle the work behind these showcases. There is no separate team of scripters, modelers, or UI designers responsible for the results shown here.
 
-- **Scripter:** gameplay systems, client/server logic, combat, physics, and system integration.
-- **VFX Artist:** visual effects and gameplay feedback.
-- **3D Modeler:** models and assets used in the projects.
+My areas of work, ordered by strength:
+
+1. **Scripter — strongest area:** gameplay systems, client/server logic, combat, physics, and system integration.
+2. **3D Modeler:** creating and integrating 3D models and game assets.
+3. **UI Designer:** designing and implementing user interfaces, HUDs, and menus.
 
 I build complete gameplay experiences by combining these disciplines, rather than contributing code alone.
 
-**Focus:** `Luau` · `Gameplay Systems` · `Client–Server Architecture` · `VFX` · `3D Modeling` · `System Integration`
+**Focus:** `Luau` · `Gameplay Systems` · `Client–Server Architecture` · `3D Modeling` · `UI Design` · `System Integration`
 
 [Video Showcase](#video-showcase) · [Core Capabilities](#core-capabilities) · [Contact](#contact)
 
@@ -18,45 +20,26 @@ I build complete gameplay experiences by combining these disciplines, rather tha
 
 ## Core Capabilities
 
-### Client-Side Development
-- Player input and interaction
-- Camera systems, aiming, and field-of-view control
-- Viewmodels and weapon presentation
-- HUDs and interactive user interfaces
-- Client-side effects and visual feedback
+### Scripting & Gameplay Architecture
+- Client-side and server-side gameplay development
+- Modular gameplay systems and script integration
+- Weapon, firing, and projectile systems
+- Combat mechanics, damage handling, and gameplay state
+- RemoteEvent communication and server-side validation
+- DataStore integration and persistent player data
+- Custom vehicle physics and Spherecast-based suspension
+- Camera, aiming, player input, and interaction systems
 
-### Server-Side Development
-- Server-controlled gameplay logic
-- RemoteEvent communication between client and server
-- Player spawning and team management
-- Health, damage, and gameplay state handling
-- Server-side validation
+### 3D Modeling & Asset Integration
+- 3D model and game asset creation
+- Preparing and integrating assets into Roblox projects
+- Connecting models and assets with gameplay systems
 
-### Gameplay & Combat Systems
-- Weapon and firing systems
-- Projectile creation, movement, and collision
-- Combat mechanics and damage handling
-- Team-based gameplay
-- Connected gameplay features built from multiple scripts and modules
-
-### Data & Player Systems
-- DataStore integration
-- Player data management
-- Persistent player information
-- Connecting saved data with gameplay systems
-
-### Physics & Simulation
-- Custom vehicle physics
-- Spherecast-based suspension
-- Projectile movement and collision detection
-- Physics behavior and object interaction
-
-### UI, VFX, 3D & Game Integration
-- Gameplay HUD and menu implementation
-- UI behavior and player interaction
-- Visual effects and gameplay feedback
-- 3D model and asset creation/integration
-- Connecting models, effects, scripts, interfaces, and gameplay logic
+### UI Design & Implementation
+- HUD and menu design
+- Interactive user interface implementation
+- Mobile touch interfaces and player-facing controls
+- UI behavior and integration with gameplay systems
 
 ---
 
@@ -67,9 +50,9 @@ I can take responsibility for a feature across the parts of a Roblox game it dep
 My development scope includes:
 - Planning and implementing gameplay features.
 - Building both client-side and server-side components.
-- Creating and integrating visual effects.
 - Creating and integrating 3D models and assets.
-- Connecting scripts, modules, RemoteEvents, data, UI, VFX, and 3D assets.
+- Designing and implementing user interfaces.
+- Connecting scripts, modules, RemoteEvents, data, UI, and 3D assets.
 - Integrating individual systems into the existing game.
 - Delivering features as functional parts of a complete gameplay experience.
 
@@ -135,7 +118,7 @@ https://github.com/user-attachments/assets/bbd83697-1c7f-41c5-883f-3abcf94796ac
 ## Tools & Technologies
 
 - **Luau** — Roblox gameplay and systems programming.
-- **Roblox Studio** — Scripting, UI implementation, physics, VFX, modeling, asset integration, and game development.
+- **Roblox Studio** — Scripting, UI design and implementation, modeling, asset integration, and game development.
 - **Git & GitHub** — Source control and project management.
 
 ---
