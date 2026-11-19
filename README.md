@@ -1,10 +1,16 @@
-# RyZen — Full-Stack Roblox Developer
+# RyZen — Solo Roblox Developer
 
-> **I build gameplay systems that work together—not just standalone scripts.**
+> **Everything showcased in this portfolio is the work of one person: me.**
 
-Independent Roblox developer focused on end-to-end implementation, from client/server logic and gameplay systems to UI, data, physics, and asset integration.
+I independently handled the work behind these showcases—there is no separate team of scripters, VFX artists, or modelers responsible for the results shown here. I work across all three disciplines myself:
 
-**Focus:** `Luau` · `Gameplay Systems` · `Client–Server Architecture` · `System Integration`
+- **Scripter:** gameplay systems, client/server logic, combat, physics, and system integration.
+- **VFX Artist:** visual effects and gameplay feedback.
+- **3D Modeler:** models and assets used in the projects.
+
+I build complete gameplay experiences by combining these disciplines, rather than contributing code alone.
+
+**Focus:** `Luau` · `Gameplay Systems` · `Client–Server Architecture` · `VFX` · `3D Modeling` · `System Integration`
 
 [Video Showcase](#video-showcase) · [Core Capabilities](#core-capabilities) · [Contact](#contact)
 
@@ -45,11 +51,12 @@ Independent Roblox developer focused on end-to-end implementation, from client/s
 - Projectile movement and collision detection
 - Physics behavior and object interaction
 
-### UI, 3D & Game Integration
+### UI, VFX, 3D & Game Integration
 - Gameplay HUD and menu implementation
 - UI behavior and player interaction
-- 3D model and asset integration
-- Connecting models, scripts, interfaces, and gameplay logic
+- Visual effects and gameplay feedback
+- 3D model and asset creation/integration
+- Connecting models, effects, scripts, interfaces, and gameplay logic
 
 ---
 
@@ -60,7 +67,9 @@ I can take responsibility for a feature across the parts of a Roblox game it dep
 My development scope includes:
 - Planning and implementing gameplay features.
 - Building both client-side and server-side components.
-- Connecting scripts, modules, RemoteEvents, data, UI, and 3D assets.
+- Creating and integrating visual effects.
+- Creating and integrating 3D models and assets.
+- Connecting scripts, modules, RemoteEvents, data, UI, VFX, and 3D assets.
 - Integrating individual systems into the existing game.
 - Delivering features as functional parts of a complete gameplay experience.
 
@@ -126,7 +135,7 @@ https://github.com/user-attachments/assets/bbd83697-1c7f-41c5-883f-3abcf94796ac
 ## Tools & Technologies
 
 - **Luau** — Roblox gameplay and systems programming.
-- **Roblox Studio** — Scripting, UI implementation, physics, asset integration, and game development.
+- **Roblox Studio** — Scripting, UI implementation, physics, VFX, modeling, asset integration, and game development.
 - **Git & GitHub** — Source control and project management.
 
 ---
