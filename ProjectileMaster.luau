@@ -19,7 +19,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 
--- Connected remote and bindables events those stay inside ReplicatedStorage
+-- Remote events stored in ReplicatedStorage.
 local Events = ReplicatedStorage:WaitForChild("Events")
 local FireEvent = Events:WaitForChild("FireEvent") :: RemoteEvent
 local RenderBulletEvent = Events:WaitForChild("RenderBullet") :: RemoteEvent
@@ -27,23 +27,55 @@ local DebugRejectEvent = Events:FindFirstChild("DebugRejectEvent") or Instance.n
 DebugRejectEvent.Name = "DebugRejectEvent"
 local ProcessDamage = ServerStorage:WaitForChild("Events"):WaitForChild("ProcessDamage") :: BindableEvent -- Send damage to process to another script
 
-local reloadingTanks: {[Instance]: boolean} = {} -- Empty the table to hold reloadTime
+-- Shared configuration defaults and timing values.
+local DEFAULT_DAMAGE = 140
+local DEFAULT_BLAST_RADIUS = 10
+local DEFAULT_MUZZLE_VELOCITY = 800
+local DEFAULT_SOUND_NAME = "cannon_fire"
+local GRAVITY_MULTIPLIER = 0.9
 
--- Helper function to dispatch debug messages to client
+local PROJECTILE_SPAWN_OFFSET = 3
+local MUZZLE_OVERLAP_CHECK_DISTANCE = 5
+local MUZZLE_OVERLAP_CLEARANCE = 1.5
+local PROJECTILE_HITBOX_SIZE = Vector3.new(0.5, 0.5, 0.5)
+local PROJECTILE_LIFETIME = 5
+
+local SOUND_VOLUME = 5
+local SOUND_MAX_DISTANCE = 1000
+local SOUND_LIFETIME = 3
+
+local RECOIL_RETRACT_DURATION = 0.05
+local RECOIL_RETURN_DURATION = 0.4
+local RECOIL_OFFSET = 0.65
+
+local VELOCITY_RECOVERY_THRESHOLD = 10
+local SHIELD_CHECK_DISTANCE = 800
+local SHIELD_PROXIMITY_RADIUS = 300
+local SHIELD_AIRBURST_RADIUS = 2
+local MINIMUM_DISPLACEMENT = 0.1
+local RAYCAST_DISPLACEMENT_MULTIPLIER = 1.1
+
+local PLAYER_RELOAD_DURATION = 3
+local NPC_RELOAD_DURATION = 4
+local NPC_SCAN_INTERVAL = 0.1
+
+local reloadingTanks: {[Instance]: boolean} = {} -- Tracks weapons currently reloading.
+
+-- Sends a debug rejection message to the requesting client.
 local function notifyReject(player: Player, reason: string): ()
 	warn(" [FIRE REJECTED]: " .. player.Name .. " -> " .. reason)
 	DebugRejectEvent:FireClient(player, " Firing Rejected: " .. reason)
 end
 
--- [[ CORE BALLISTICS ENGINE ]]
+-- [[ CORE PROJECTILE SYSTEM ]]
 local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3, clientMuzzlePos: Vector3?, clientLookDirection: Vector3?, attackerPlayer: Player?): ()
-	local baseDamage = weaponPart:GetAttribute("Damage") or 140
-	local blastRadius = weaponPart:GetAttribute("BlastRadius") or 10
+	local baseDamage = weaponPart:GetAttribute("Damage") or DEFAULT_DAMAGE
+	local blastRadius = weaponPart:GetAttribute("BlastRadius") or DEFAULT_BLAST_RADIUS
 	local damageType = "Heavy"
-	local muzzleVelocity = weaponPart:GetAttribute("MuzzleVelocity") or 800
-	local soundName = weaponPart:GetAttribute("SoundName") or "cannon_fire"
+	local muzzleVelocity = weaponPart:GetAttribute("MuzzleVelocity") or DEFAULT_MUZZLE_VELOCITY
+	local soundName = weaponPart:GetAttribute("SoundName") or DEFAULT_SOUND_NAME
 	local isExplosive = weaponPart:GetAttribute("IsExplosive") == true
-	local gravityMultiplier = 0.9
+	local gravityMultiplier = GRAVITY_MULTIPLIER
 
 	local cannon = weaponPart:FindFirstChild("Cannon", true) or weaponPart
 	local muzzle = cannon:FindFirstChild("Muzzle") or cannon
@@ -72,10 +104,10 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 	safetyParams.FilterType = Enum.RaycastFilterType.Exclude
 	safetyParams.FilterDescendantsInstances = {tankModel}
 
-	local finalSpawnPos = spawnOrigin + (projectileDirection * 3)
-	local overlapCheck = workspace:Raycast(spawnOrigin, projectileDirection * 5, safetyParams)
+	local finalSpawnPos = spawnOrigin + (projectileDirection * PROJECTILE_SPAWN_OFFSET)
+	local overlapCheck = workspace:Raycast(spawnOrigin, projectileDirection * MUZZLE_OVERLAP_CHECK_DISTANCE, safetyParams)
 	if overlapCheck then
-		finalSpawnPos = overlapCheck.Position + (projectileDirection * 1.5)
+		finalSpawnPos = overlapCheck.Position + (projectileDirection * MUZZLE_OVERLAP_CLEARANCE)
 	end
 
 	local bulletId = HttpService:GenerateGUID(false)
@@ -83,7 +115,7 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 	-- Instantiate physical projectile server hitbox
 	local bullet = Instance.new("Part")
 	bullet.Name = "Projectile_Hitbox"
-	bullet.Size = Vector3.new(0.5, 0.5, 0.5)
+	bullet.Size = PROJECTILE_HITBOX_SIZE
 	bullet.Transparency = 1
 	bullet.CanCollide = false
 
@@ -117,19 +149,19 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 	if fireSound and fireSound:IsA("Sound") then
 		local sfx = fireSound:Clone()
 		sfx.Parent = cannon
-		sfx.Volume = 5.0
-		sfx.RollOffMaxDistance = 1000
+		sfx.Volume = SOUND_VOLUME
+		sfx.RollOffMaxDistance = SOUND_MAX_DISTANCE
 		sfx:Play()
-		Debris:AddItem(sfx, 3)
+		Debris:AddItem(sfx, SOUND_LIFETIME)
 	end
 
 	-- Procedural recoil animation override using motor6D on tank's model
 	local recoilJoint = cannon:FindFirstChild("RecoilJoint")
 	if recoilJoint and recoilJoint:IsA("Motor6D") then
 		local originalC0 = recoilJoint.C0
-		local infoRetract = TweenInfo.new(0.05, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local infoReturn = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-		local targetC0 = originalC0 * CFrame.new(0, 0.65, 0)
+		local infoRetract = TweenInfo.new(RECOIL_RETRACT_DURATION, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local infoReturn = TweenInfo.new(RECOIL_RETURN_DURATION, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+		local targetC0 = originalC0 * CFrame.new(0, RECOIL_OFFSET, 0)
 
 		local tweenRetract = TweenService:Create(recoilJoint, infoRetract, {C0 = targetC0})
 		tweenRetract:Play()
@@ -154,12 +186,14 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 	local connection
 	connection = RunService.Heartbeat:Connect(function(dt: number): ()
 		if not bullet.Parent then
-			if connection then connection:Disconnect() end
+			if connection then
+				connection:Disconnect()
+			end
 			return
 		end
 
 		-- Restore velocity if physics stalls
-		if bullet.AssemblyLinearVelocity.Magnitude < 10 then
+		if bullet.AssemblyLinearVelocity.Magnitude < VELOCITY_RECOVERY_THRESHOLD then
 			bullet.AssemblyLinearVelocity = finalVelocity
 		end
 
@@ -167,14 +201,14 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 
 		-- Proximity shield dissolve check
 		local totalTravelDistance = (currentPosition - finalSpawnPos).Magnitude
-		if totalTravelDistance > 800 then
+		if totalTravelDistance > SHIELD_CHECK_DISTANCE then
 			local enemyShield = (tankTeam == "Germany") and britainShield or germanyShield
-			if enemyShield and enemyShield:IsA("BasePart") and (currentPosition - enemyShield.Position).Magnitude <= 300 then
+			if enemyShield and enemyShield:IsA("BasePart") and (currentPosition - enemyShield.Position).Magnitude <= SHIELD_PROXIMITY_RADIUS then
 				connection:Disconnect()
 				RenderBulletEvent:FireAllClients("DestroyVisual", bulletId)
 
 				local airBurst = Instance.new("Explosion")
-				airBurst.BlastRadius = 2
+				airBurst.BlastRadius = SHIELD_AIRBURST_RADIUS
 				airBurst.Position = currentPosition
 				airBurst.Parent = workspace
 				bullet:Destroy()
@@ -185,14 +219,14 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 		local displacement = currentPosition - lastPosition
 
 		-- Mathematical displacement fallback during physics hiccups
-		if displacement.Magnitude < 0.1 then
+		if displacement.Magnitude < MINIMUM_DISPLACEMENT then
 			displacement = finalVelocity * dt
 			lastPosition = lastPosition + displacement
 		else
 			lastPosition = currentPosition
 		end
 
-		local raycastResult = workspace:Raycast(lastPosition - displacement, displacement * 1.1, raycastParams)
+		local raycastResult = workspace:Raycast(lastPosition - displacement, displacement * RAYCAST_DISPLACEMENT_MULTIPLIER, raycastParams)
 
 		if raycastResult then
 			local hitInstance = raycastResult.Instance
@@ -227,7 +261,7 @@ local function firing(weaponPart: Instance, tankModel: Model, aimPoint: Vector3,
 		end
 	end)
 
-	Debris:AddItem(bullet, 5)
+	Debris:AddItem(bullet, PROJECTILE_LIFETIME)
 end
 
 -- Shared weapon reload routine
@@ -244,7 +278,7 @@ local function reloadWeapon(weapon: Instance, tankModel: Model, defaultReload: n
 	tankModel:SetAttribute("ReloadTime", 0)
 end
 
--- [[ INBOUND FIRE REQUEST LISTENER (PLAYERS) ]]
+-- [[ PLAYER REQUEST HANDLER ]]
 FireEvent.OnServerEvent:Connect(function(
 	player: Player,
 	weaponName: string,
@@ -329,7 +363,7 @@ FireEvent.OnServerEvent:Connect(function(
 	reloadingTanks[weapon] = true
 	local success, err = pcall(function(): ()
 		firing(weapon, tankModel, aimPoint, clientMuzzlePos, clientLookDirection, player)
-		reloadWeapon(weapon, tankModel, 3)
+		reloadWeapon(weapon, tankModel, PLAYER_RELOAD_DURATION)
 	end)
 
 	if not success then
@@ -339,10 +373,10 @@ FireEvent.OnServerEvent:Connect(function(
 	reloadingTanks[weapon] = nil
 end)
 
--- [[ NPC AUTOMATIC FIRING INTEGRATION ]]
+-- [[ NPC REQUEST HANDLER ]]
 task.spawn(function(): ()
 	while true do
-		task.wait(0.1)
+		task.wait(NPC_SCAN_INTERVAL)
 
 		for _, tankModel in ipairs(workspace:GetChildren()) do
 			if tankModel:IsA("Model") and tankModel:GetAttribute("IsNPC") == true and not tankModel:GetAttribute("IsDestroyed") then
@@ -374,7 +408,7 @@ task.spawn(function(): ()
 
 							local success, err = pcall(function(): ()
 								firing(weapon, tankModel, targetPos, spawnPos, fireDir, nil)
-								reloadWeapon(weapon, tankModel, 4)
+								reloadWeapon(weapon, tankModel, NPC_RELOAD_DURATION)
 							end)
 
 							if not success then
