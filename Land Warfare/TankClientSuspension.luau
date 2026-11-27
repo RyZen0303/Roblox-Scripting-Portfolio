@@ -1,7 +1,4 @@
--- ============================================================================
--- // TankClientSuspension (Client Vehicle Controller Engine) //
--- // Location: StarterPlayerScripts
--- ============================================================================
+-- // TankClientSuspension //
 
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
