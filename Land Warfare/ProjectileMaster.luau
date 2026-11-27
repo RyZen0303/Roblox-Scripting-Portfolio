@@ -83,8 +83,8 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 
 	-- [[ DYNAMIC RAYCAST CONFIG ]] --
 	local raycastParams = RaycastParams.new()
-	raycastParams.CollisionGroup = bullet.CollisionGroup -- Inherits team rules from PhysicsManager natively
-	raycastParams.FilterDescendantsInstances = {tankModel, bullet} -- Exclude firing vehicle self-harm
+	raycastParams.CollisionGroup = bullet.CollisionGroup -- Apply the projectile's team collision rules.
+	raycastParams.FilterDescendantsInstances = {tankModel, bullet} -- Ignore the firing tank and projectile.
 	raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 
 	-- High-Precision Frame-by-Frame Raycast Loop
@@ -123,7 +123,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 			-- Check 1: Direct hit on hostile Main Base Shield Attribute
 			if hitInstance:GetAttribute("Health") ~= nil and string.find(hitInstance.Name, "Shield") then
 				local currentShieldHP = hitInstance:GetAttribute("Health") or 0
-				local structuralDamage = baseDamage * 2 -- Optional: Deal double damage to structures
+				local structuralDamage = baseDamage * 2 -- Shields take double damage.
 				hitInstance:SetAttribute("Health", math.max(currentShieldHP - structuralDamage, 0))
 				print(" [SHIELD IMPACT]: Direct hit on " .. hitInstance.Name .. ". Reduced HP by " .. structuralDamage)
 
