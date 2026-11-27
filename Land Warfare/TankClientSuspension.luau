@@ -1,4 +1,4 @@
--- // TankClientSuspension //
+-- TankClientSuspension
 
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -6,7 +6,7 @@ local CollectionService = game:GetService("CollectionService")
 
 local player = Players.LocalPlayer
 
--- [[ Constants & Tuning Baselines ]] --
+-- Suspension and driving constants
 local SPHERE_RADIUS = 1.0
 local SERVO_MAX_FORCE = 2500000
 
@@ -17,7 +17,7 @@ local DRIVE_DEFAULT_ACCEL = 18
 local activeSuspensionData = {}
 local currentTankModel = nil
 
--- [[ Raycast Parameters Setup ]] --
+-- Raycast parameters
 local raycastParams = RaycastParams.new()
 raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 raycastParams.IgnoreWater = true -- Ignore water when sampling suspension contacts.
@@ -26,10 +26,10 @@ local waterCheckParams = RaycastParams.new()
 waterCheckParams.FilterType = Enum.RaycastFilterType.Exclude
 waterCheckParams.IgnoreWater = false -- Include water for the surface-height check.
 
--- [[ Reusable Static Matrix Caches ]] --
+-- Shared physical properties
 local STATIC_FRICTION = PhysicalProperties.new(0.7, 0.7, 0.3, 1, 1)
 
--- [[ Node Caches ]] --
+-- Cached tank components
 local cachedHull = nil
 local cachedWheelConfig = nil
 local cachedDriveLV = nil
@@ -38,7 +38,7 @@ local cachedTerrainAlign = nil
 local cachedTerrainAttachment = nil
 local smoothedTerrainUp = nil
 
--- [[ Client Tracking State ]] --
+-- Driving state
 local driveState = {
 	throttleVel = 0,
 	steerVel = 0,
@@ -49,9 +49,9 @@ local driveState = {
 
 local isEngineDrowned = false
 
--- ============================================================================
--- // Utility Functions //
--- ============================================================================
+--
+-- Utility functions
+--
 
 local function moveTowards(current, target, maxDelta)
 	if math.abs(target - current) <= maxDelta then 
@@ -88,7 +88,7 @@ local function cleanLocalSuspension()
 	driveState.steerVel = 0
 	isEngineDrowned = false
 
-	-- State-guarded attribute reset to prevent RemoteEvent/Network Exhaustion
+	-- Reset the attribute only if it is currently set.
 	if player:GetAttribute("TankEngineDrowned") ~= nil then
 		player:SetAttribute("TankEngineDrowned", nil)
 	end
@@ -198,9 +198,9 @@ local function hookLocalSuspension(tankModel)
 	end
 end
 
--- ============================================================================
--- // REALTIME CLIENT DRIVING LOOP //
--- ============================================================================
+--
+-- Client driving and suspension update
+--
 
 RunService.Heartbeat:Connect(function(rawDt)
 	local dt = math.min(rawDt, 0.05)
@@ -243,9 +243,9 @@ RunService.Heartbeat:Connect(function(rawDt)
 	local look = hullCF.LookVector
 	local curSpeed = hull.AssemblyLinearVelocity.Magnitude
 
-	-- [[ POWERTRAIN ENGINE ]] --
+	-- Powertrain
 	if isEngineDrowned then
-		-- Permanent Engine Shutdown Logic when vehicle is flooded
+		-- Disable driving when the engine is flooded.
 		driveState.throttleVel = 0
 		driveState.steerVel = 0
 		driveLV.MaxForce = 0
@@ -259,7 +259,7 @@ RunService.Heartbeat:Connect(function(rawDt)
 		end
 
 		if driveState.isShifting then
-			-- Cancel a pending reversal if the driver returns to the current gear.
+			-- Cancel the shift if the driver returns to the current direction.
 			if inputDir ~= 0 and inputDir == driveState.lastDir then
 				driveState.isShifting = false
 				driveState.shiftTimer = 0
@@ -324,13 +324,13 @@ RunService.Heartbeat:Connect(function(rawDt)
 		steerAV.MaxTorque = 30000000
 		steerAV.AngularVelocity = Vector3.new(0, driveState.steerVel, 0)
 
-		-- Dynamic downforce to keep vehicle grounded smoothly on terrain
+		-- Apply downforce to help keep the tank grounded.
 		local impulseY = -((effectiveT > 0 and 15 or 45) * hull.AssemblyMass * dt)
 		impulseY = math.clamp(impulseY, -hull.AssemblyMass * 2.5, 0)
 		hull:ApplyImpulse(Vector3.new(0, impulseY, 0))
 	end
 
-	-- [[ CLIENT SUSPENSION ENGINE & WATER SUBMERGENCE MONITOR ]] --
+	-- Suspension and water checks
 	local cfgMainH = wheelConfig:GetAttribute("MainHeight") or 2.4
 	local cfgSprocketH = wheelConfig:GetAttribute("SprocketHeight") or 1.4
 	local cfgIdlerH = wheelConfig:GetAttribute("IdlerHeight") or 1.43
@@ -342,11 +342,11 @@ RunService.Heartbeat:Connect(function(rawDt)
 	local idlerDir = (-up - lookOffset).Unit
 	local dynamicAlpha = math.clamp(dt * 12, 0.05, 1.0)
 
-	-- Single raycast sample per frame to check for global terrain water surface elevation
+	-- Sample the water surface once per frame.
 	local waterHit = workspace:Raycast(hull.Position + Vector3.new(0, 15, 0), Vector3.new(0, -30, 0), waterCheckParams)
 	local waterSurfaceY = (waterHit and waterHit.Material == Enum.Material.Water) and waterHit.Position.Y or nil
 
-	-- PASS 1: Sample wheel contacts, water submergence, and compute ground distance averages
+	-- Pass 1: Detect wheel contact and water submergence.
 	local submergedWheelCount = 0
 	local accumulatedNormal = Vector3.zero
 	local validNormalCount = 0
@@ -359,7 +359,7 @@ RunService.Heartbeat:Connect(function(rawDt)
 		local castDirection = (wType == "Road" and -up) or (wType == "Sprocket" and sprocketDir) or idlerDir
 		local worldPos = sData.att.WorldPosition
 
-		-- Check if individual wheel position is under terrain water surface
+		-- Check whether this wheel is submerged.
 		local isSubmerged = false
 		if waterSurfaceY and worldPos.Y <= (waterSurfaceY + 0.3) then
 			isSubmerged = true
@@ -368,7 +368,7 @@ RunService.Heartbeat:Connect(function(rawDt)
 
 		local cast = workspace:Spherecast(worldPos + (up * 2), cfgSphereRadius, castDirection * (tH + 4), raycastParams)
 
-		-- Disable suspension lift for submerged wheels or direct water hits
+		-- Skip suspension lift for submerged wheels and water hits.
 		if isSubmerged or (cast and cast.Material == Enum.Material.Water) then
 			cast = nil
 		end
@@ -376,7 +376,7 @@ RunService.Heartbeat:Connect(function(rawDt)
 		castResults[i] = cast
 
 		if cast then
-			-- Ignore near-vertical surfaces so walls/obstacles cannot roll the hull.
+			-- Ignore steep surfaces when calculating hull alignment.
 			if cast.Normal.Y > 0.25 then
 				accumulatedNormal = accumulatedNormal + cast.Normal
 				validNormalCount = validNormalCount + 1
@@ -384,16 +384,16 @@ RunService.Heartbeat:Connect(function(rawDt)
 		end
 	end
 
-	-- Trigger permanent engine drowning if more than 50% of active wheels are submerged
+	-- Shut down the engine when more than half the wheels are submerged.
 	if not isEngineDrowned and (#activeSuspensionData > 0) and (submergedWheelCount > (#activeSuspensionData / 2)) then
 		isEngineDrowned = true
-		-- State-guarded attribute update (fires only ONCE to prevent RemoteEvent / Network Exhaustion)
+		-- Update the attribute only when its value changes.
 		if player:GetAttribute("TankEngineDrowned") ~= true then
 			player:SetAttribute("TankEngineDrowned", true)
 		end
 	end
 
-	-- Align the hull to the averaged surface normal instead of distance-delta pitch bias.
+	-- Align the hull to the average ground normal.
 	if validNormalCount > 0 and cachedTerrainAlign then
 		local averageNormal = accumulatedNormal.Unit
 		if smoothedTerrainUp then
@@ -402,7 +402,7 @@ RunService.Heartbeat:Connect(function(rawDt)
 			smoothedTerrainUp = averageNormal
 		end
 
-		-- Preserve the current heading while projecting it onto the target terrain plane.
+		-- Keep the current heading while aligning to the ground plane.
 		local heading = hull.CFrame.LookVector
 		local projectedLook = heading - smoothedTerrainUp * heading:Dot(smoothedTerrainUp)
 		if projectedLook.Magnitude < 0.001 then
@@ -415,7 +415,7 @@ RunService.Heartbeat:Connect(function(rawDt)
 		end
 	end
 
-	-- PASS 2: Apply perpendicular suspension forces
+	-- Pass 2: Apply suspension forces.
 	for i = 1, #activeSuspensionData do
 		local sData = activeSuspensionData[i]
 		local cast = castResults[i]
@@ -423,7 +423,7 @@ RunService.Heartbeat:Connect(function(rawDt)
 		local tH = (wType == "Road" and cfgMainH) or (wType == "Sprocket" and cfgSprocketH) or cfgIdlerH
 		local castDirection = (wType == "Road" and -up) or (wType == "Sprocket" and sprocketDir) or idlerDir
 
-		-- Match the working server suspension formula while the driver owns the tank.
+		-- Use the same suspension calculation as the server-side system.
 		if cast then
 			local pVel = hull:GetVelocityAtPosition(sData.att.WorldPosition):Dot(-castDirection)
 			local targetV = ((tH - (cast.Distance - 2)) * cfgServoResp) - (pVel * 1.4)
