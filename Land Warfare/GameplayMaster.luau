@@ -20,8 +20,8 @@ local FLAGS_FOLDER = ASSETS_FOLDER and ASSETS_FOLDER:WaitForChild("FlagIcon", 5)
 local BASE_CAPTURE_RATE = 1.5
 local REWARD_POINTS = 7
 local TANK_KILL_REWARD = 25
-local OUT_OF_COMBAT_TIME = 30.0 -- Mandatory damage-free window before healing triggers
-local HEAL_TICK_RATE = 2.0      -- Time interval between auto-heal ticks
+local OUT_OF_COMBAT_TIME = 30.0 -- Time without damage before regeneration starts.
+local HEAL_TICK_RATE = 2.0      -- Delay between regeneration ticks.
 
 local TEAM_COLORS = {
 	["Germany"] = Color3.fromRGB(245, 190, 40),
@@ -329,7 +329,7 @@ task.spawn(function()
 				-- [[ FIELD ACTIVE ]: Players present in area boundary ]]
 				if countGER == countBR then
 					-- [[ CASE 3 ]: Balanced contest state. Lock progress ratio exactly in place.
-					zone:SetAttribute("Owner", "Neutral") -- Force drop capture title under challenge
+					zone:SetAttribute("Owner", "Neutral") -- Contested zones have no owner.
 					-- Skip modifications; mathematical change rate equals zero
 				else
 					local dominantTeam = (countGER > countBR) and "Germany" or "Britain"
@@ -379,12 +379,12 @@ task.spawn(function()
 							zone:SetAttribute("Owner", dominantTeam)
 							zone:SetAttribute("PreviousOwner", dominantTeam)
 						else
-							zone:SetAttribute("Owner", "Neutral") -- Enforce strict uncapped neutralization
+							zone:SetAttribute("Owner", "Neutral") -- Ownership is cleared until capture completes.
 						end
 					else
 						-- Depleting enemy progress down toward zero threshold
 						currentProgress = math.max(currentProgress - rate, 0)
-						zone:SetAttribute("Owner", "Neutral") -- Instant title removal
+						zone:SetAttribute("Owner", "Neutral") -- Clear ownership while capture progress is reduced.
 						if currentProgress <= 0 then
 							capturingTeam = dominantTeam
 							zone:SetAttribute("CapturingTeam", dominantTeam)
@@ -463,7 +463,7 @@ end)
 -- [[  PASSIVE REWARD SYSTEM ]] --
 task.spawn(function()
 	while true do
-		task.wait(120) -- Loop executes every 120 seconds (2 minutes) to distribute passive points
+		task.wait(120) -- Award passive points every two minutes.
 		if matchActive then
 			local currentPlayers = Players:GetPlayers()
 			for i = 1, #currentPlayers do
