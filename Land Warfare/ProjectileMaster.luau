@@ -1,7 +1,4 @@
--- // ProjectileMaster () //
--- Location: ServerScriptService
--- Description: Server-side weapon controller executing high-precision anti-desync raycasts,
--- explicit team physics grouping, and direct structural/infantry damage routing.
+-- // ProjectileMaster //
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Debris = game:GetService("Debris")
