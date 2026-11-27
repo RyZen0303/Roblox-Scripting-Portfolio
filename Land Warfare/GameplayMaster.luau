@@ -1,6 +1,4 @@
--- // GameplayMaster (Server-Side - Combat, Conquest & Terrain Sync) //
--- Location: ServerScriptService
--- Optimized for: Dynamic Out-of-Combat Regen, Strict Conquest Neutralization, and Destructible Physics.
+-- // GameplayMaster //
 
 local ServerStorage = game:GetService("ServerStorage")
 local TweenService = game:GetService("TweenService")
