@@ -1,11 +1,11 @@
--- // ProjectileMaster //
+-- ProjectileMaster
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
--- Remote Events
+-- Remote events
 local FireEvent = ReplicatedStorage:WaitForChild("Events"):WaitForChild("FireEvent")
 local RenderBulletEvent = ReplicatedStorage:WaitForChild("Events"):WaitForChild("RenderBullet")
 local ProcessDamage = ServerStorage:WaitForChild("Events"):WaitForChild("ProcessDamage")
@@ -13,7 +13,7 @@ local ProcessDamage = ServerStorage:WaitForChild("Events"):WaitForChild("Process
 local reloadingTanks = {}
 
 local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLookDirection)
-	-- // Attribute Extraction //
+	-- Weapon attributes
 	local baseDamage = weaponPart:GetAttribute("Damage") or 140
 	local blastRadius = weaponPart:GetAttribute("BlastRadius") or 10
 	local damageType = weaponPart:GetAttribute("DamageType") or "Heavy"
@@ -21,30 +21,30 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 	local soundName = weaponPart:GetAttribute("SoundName") or "cannon_fire"
 	local isExplosive = weaponPart:GetAttribute("IsExplosive")
 
-	-- Locate Cannon part for structural calculations
+	-- Find the cannon assembly
 	local cannon = weaponPart:FindFirstChild("Cannon", true) or weaponPart
 	if not cannon then
 		warn(" [DEBUG] Cannot find Cannon for: " .. weaponPart.Name)
 		return
 	end
 
-	-- Muzzle visual reference point
+	-- Muzzle reference point
 	local muzzle = cannon:FindFirstChild("Muzzle") or cannon
 
-	-- [[ CRITICAL LONG-RANGE DESYNC FIX ]] --
-	-- Resolves latency offset between local simulation and authoritative server layer
+	-- Use the client-reported firing position and direction
+	-- These values compensate for differences between client and server tank simulation.
 	local projectileDirection = clientLookDirection or -cannon.CFrame.UpVector
 	local finalSpawnPos = clientMuzzlePos or muzzle.Position
 
-	-- Projectile Hitbox Setup
+	-- Projectile hitbox
 	local bullet = Instance.new("Part")
 	bullet.Name = "Projectile_Hitbox"
 	bullet.Size = Vector3.new(0.5, 0.5, 0.5)
 	bullet.Transparency = 1
 	bullet.CanCollide = false
 
-	-- [[ TEAM IDENTIFICATION LOGIC ]] --
-	-- Dynamically shifts buckets based on the tank's assigned team string attribute
+	-- Projectile collision group
+	-- Assign the projectile to the firing tank's team collision group.
 	local tankTeam = tankModel:GetAttribute("Team") or "Germany"
 	if tankTeam == "Germany" then
 		bullet.CollisionGroup = "Projectiles_Germany"
@@ -57,7 +57,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 	bullet.CFrame = CFrame.lookAt(finalSpawnPos, finalSpawnPos + projectileDirection)
 	pcall(function() bullet:SetNetworkOwner(nil) end)
 
-	-- Ballistics gravity compensation (Applies 80% counter-force for realistic terminal arc)
+	-- Reduce gravity to flatten the projectile's trajectory.
 	local gravityReducer = Instance.new("VectorForce")
 	gravityReducer.Force = Vector3.new(0, bullet:GetMass() * workspace.Gravity * 0.8, 0)
 	gravityReducer.Attachment0 = Instance.new("Attachment", bullet)
@@ -66,10 +66,10 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 	local finalVelocity = projectileDirection * muzzleVelocity
 	bullet.AssemblyLinearVelocity = finalVelocity
 
-	-- Visual replication trigger
+	-- Replicate the projectile tracer
 	RenderBulletEvent:FireAllClients(muzzle, finalSpawnPos, finalVelocity, damageType)
 
-	-- SFX Audio Playback
+	-- Play firing sound
 	local assets = ReplicatedStorage:FindFirstChild("Assets")
 	local fireSound = assets and assets.Sounds:FindFirstChild(soundName)
 	if fireSound then
@@ -81,13 +81,13 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 		Debris:AddItem(sfx, 3)
 	end
 
-	-- [[ DYNAMIC RAYCAST CONFIG ]] --
+	-- Raycast configuration
 	local raycastParams = RaycastParams.new()
 	raycastParams.CollisionGroup = bullet.CollisionGroup -- Apply the projectile's team collision rules.
 	raycastParams.FilterDescendantsInstances = {tankModel, bullet} -- Ignore the firing tank and projectile.
 	raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 
-	-- High-Precision Frame-by-Frame Raycast Loop
+	-- Check the projectile's movement each frame
 	local lastPosition = bullet.Position
 	local connection
 	connection = RunService.Heartbeat:Connect(function()
@@ -99,14 +99,14 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 		local currentPosition = bullet.Position
 		local displacement = currentPosition - lastPosition
 
-		-- Engine native broadphase handles filtering base fields automatically based on team collision groups
+		-- Collision-group filtering is handled by the physics engine.
 		local raycastResult = workspace:Raycast(lastPosition, displacement * 1.1, raycastParams)
 
 		if raycastResult then
 			connection:Disconnect()
 			local hitInstance = raycastResult.Instance
 
-			-- Spawn purely visual explosion if attribute is active
+			-- Create a visual explosion when the weapon is explosive.
 			if isExplosive and blastRadius > 0 then
 				local exp = Instance.new("Explosion")
 				exp.BlastRadius = blastRadius
@@ -116,23 +116,23 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 				exp.Parent = workspace
 			end
 
-			-- [[ COMPREHENSIVE DAMAGE ROUTING SYSTEM ]] --
+			-- Route damage based on the hit target
 			local hitCharacter = hitInstance:FindFirstAncestorOfClass("Model")
 			local targetHumanoid = hitCharacter and hitCharacter:FindFirstChildOfClass("Humanoid")
 
-			-- Check 1: Direct hit on hostile Main Base Shield Attribute
+			-- Apply direct damage to base shields.
 			if hitInstance:GetAttribute("Health") ~= nil and string.find(hitInstance.Name, "Shield") then
 				local currentShieldHP = hitInstance:GetAttribute("Health") or 0
 				local structuralDamage = baseDamage * 2 -- Shields take double damage.
 				hitInstance:SetAttribute("Health", math.max(currentShieldHP - structuralDamage, 0))
 				print(" [SHIELD IMPACT]: Direct hit on " .. hitInstance.Name .. ". Reduced HP by " .. structuralDamage)
 
-				-- Check 2: Direct hit on enemy Infantry personnel
+				-- Apply direct damage to infantry.
 			elseif targetHumanoid and not hitCharacter:GetAttribute("Health") then
 				targetHumanoid:TakeDamage(baseDamage)
 				print(" [HIT DIRECT]: Infantry hit. Dealt " .. baseDamage .. " damage to " .. hitCharacter.Name)
 
-				-- Check 3: Standard surface/armored target (Route to external module calculator)
+				-- Route other hits through the damage processor.
 			else
 				ProcessDamage:Fire(hitInstance, baseDamage, damageType)
 			end
@@ -145,7 +145,7 @@ local function firing(weaponPart, tankModel, aimPoint, clientMuzzlePos, clientLo
 	Debris:AddItem(bullet, 5)
 end
 
--- Connection Listener Monitoring Vehicle Inputs
+-- Handle firing requests from the driver.
 FireEvent.OnServerEvent:Connect(function(player, weaponName, aimPoint, clientMuzzlePos, clientLookDirection)
 	local char = player.Character
 	local humanoid = char and char:FindFirstChildOfClass("Humanoid")
