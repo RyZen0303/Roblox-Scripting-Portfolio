@@ -20,11 +20,11 @@ local currentTankModel = nil
 -- [[ Raycast Parameters Setup ]] --
 local raycastParams = RaycastParams.new()
 raycastParams.FilterType = Enum.RaycastFilterType.Exclude
-raycastParams.IgnoreWater = true -- Penetrate terrain water surface to prevent floating
+raycastParams.IgnoreWater = true -- Ignore water when sampling suspension contacts.
 
 local waterCheckParams = RaycastParams.new()
 waterCheckParams.FilterType = Enum.RaycastFilterType.Exclude
-waterCheckParams.IgnoreWater = false -- Dedicated filter to detect terrain water surface level
+waterCheckParams.IgnoreWater = false -- Include water for the surface-height check.
 
 -- [[ Reusable Static Matrix Caches ]] --
 local STATIC_FRICTION = PhysicalProperties.new(0.7, 0.7, 0.3, 1, 1)
