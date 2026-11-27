@@ -191,7 +191,7 @@ local function setupCaptureUI(zone)
 		zone.Color = clr
 
 		-- Sync spawn-pad team attributes
-			-- Find spawn pads inside the capture zone.
+		-- Find spawn pads inside the capture zone.
 		for _, child in ipairs(zone:GetDescendants()) do
 			if child:IsA("BasePart") and (child.Name:find("SpawnPad") or child.Name:find("ButtonPad")) then
 				-- Update the pad's team to the zone's current owner.
