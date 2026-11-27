@@ -1,4 +1,4 @@
--- // GameplayMaster //
+-- GameplayMaster
 
 local ServerStorage = game:GetService("ServerStorage")
 local TweenService = game:GetService("TweenService")
@@ -9,7 +9,7 @@ local PlayerDataManager = require(ServerScriptService:WaitForChild("Modules"):Wa
 
 local PointEvent = ReplicatedStorage:WaitForChild("Events"):WaitForChild("PointStatusUpdate")
 
--- [[  CONFIGURATION & TUNING ]] --
+-- Configuration
 local CAPTURE_ZONES_FOLDER = workspace:WaitForChild("CaptureZones", 15)
 local ASSETS_FOLDER = ServerStorage:WaitForChild("GameAssets", 5)
 
@@ -29,7 +29,7 @@ local TEAM_COLORS = {
 	["Neutral"] = Color3.fromRGB(255, 255, 255)
 }
 
--- [[  STATIC INSTANCE REUSE & CACHING ]] --
+-- Cached instances and shield references
 local zoneOverlapParams = OverlapParams.new()
 zoneOverlapParams.FilterType = Enum.RaycastFilterType.Exclude
 
@@ -66,7 +66,7 @@ end
 
 local matchActive = true
 
--- [[  MATCH LIFECYCLE CONTROLLER ]] --
+-- Match lifecycle
 local function endMatchAndReset(winningTeam)
 	if not matchActive then return end
 	matchActive = false
@@ -107,7 +107,7 @@ local function endMatchAndReset(winningTeam)
 	matchActive = true
 end
 
--- // CORE SHIELD MONITORING THREAD //
+-- Monitor base shields
 task.spawn(function()
 	while true do
 		task.wait(0.5)
@@ -121,7 +121,7 @@ task.spawn(function()
 	end
 end)
 
--- [[  TANK INITIALIZATION SYSTEM ]] --
+-- Tank initialization
 local function setupTankOverhead(tank)
 	if not OVERHEAD_TEMPLATE then return end
 	local teamName = tank:GetAttribute("Team") or tank:GetAttribute("OwnerTeam")
@@ -144,7 +144,7 @@ local function setupTankOverhead(tank)
 	tank:SetAttribute("LastDamageTime", 0)
 end
 
--- [[  STRATEGIC POINT UI SYSTEM ]] --
+-- Capture-point UI
 local function setupCaptureUI(zone)
 	if not CAPTURE_UI_TEMPLATE then return end
 	local uiAnchor = zone:FindFirstChild("UIAnchor") or Instance.new("Attachment", zone)
@@ -181,7 +181,7 @@ local function setupCaptureUI(zone)
 		end
 	end)
 
-	-- [[  REAL-TIME SPAWN PAD FACTION SYNC ]] --
+	-- Update spawn-pad ownership
 	zone:GetAttributeChangedSignal("Owner"):Connect(function()
 		local owner = zone:GetAttribute("Owner") or "Neutral"
 		pcall(function() PointEvent:FireAllClients(zone.Name, owner) end)
@@ -190,11 +190,11 @@ local function setupCaptureUI(zone)
 		if label then label.BackgroundColor3 = clr end
 		zone.Color = clr
 
-		-- [[  AUTOMATED SPAWN PAD FACTION ALIGNMENT ]] --
-		-- Recursively scan all descendants of this captured zone to find its interactive pad
+		-- Sync spawn-pad team attributes
+			-- Find spawn pads inside the capture zone.
 		for _, child in ipairs(zone:GetDescendants()) do
 			if child:IsA("BasePart") and (child.Name:find("SpawnPad") or child.Name:find("ButtonPad")) then
-				-- Authoritatively overwrite the pad's team affiliation to deny old owners instantly
+				-- Update the pad's team to the zone's current owner.
 				child:SetAttribute("Team", owner)
 				print(string.format(" [Faction Sync]: Automatically converted %s alignment to: %s", child.Name, owner))
 			end
@@ -204,7 +204,7 @@ local function setupCaptureUI(zone)
 
 end
 
--- [[  SPATIAL DETECTION SYSTEM ]] --
+-- Tank detection inside capture zones
 local function getTanksInZone(zone)
 	local detectedTanks = {}
 	zoneOverlapParams.FilterDescendantsInstances = {zone}
@@ -234,7 +234,7 @@ local function getTanksInZone(zone)
 	return detectedTanks
 end
 
--- [[  DESTRUCTIBLE TERRAIN INFRASTRUCTURE ]] --
+-- Destructible terrain
 local function handleDestructibleDamage(part)
 	if not part:IsA("BasePart") then return end
 	part:GetAttributeChangedSignal("Health"):Connect(function()
@@ -266,7 +266,7 @@ local function initializeDestructibleTerrain()
 	end
 end
 
--- Execute core initialization maps
+-- Initialize shields, terrain, and capture zones
 initializeShields(false)
 initializeDestructibleTerrain()
 
@@ -289,7 +289,7 @@ workspace.DescendantAdded:Connect(function(obj)
 	end
 end)
 
--- [[  DYNAMIC MULTI-POINT CONQUEST SYSTEM ]] --
+-- Capture-point control
 task.spawn(function()
 	local function rewardTeam(teamName)
 		local currentPlayers = Players:GetPlayers()
@@ -315,7 +315,7 @@ task.spawn(function()
 			local countGER = 0
 			local countBR = 0
 
-			-- Aggregate physical presence data inside zone mapping
+			-- Count tanks from each team in the zone.
 			for _, team in pairs(tanksFound) do
 				if team == "Germany" then countGER = countGER + 1
 				elseif team == "Britain" then countBR = countBR + 1 end
@@ -326,11 +326,11 @@ task.spawn(function()
 			local previousOwner = zone:GetAttribute("PreviousOwner") or "Neutral"
 
 			if countGER > 0 or countBR > 0 then
-				-- [[ FIELD ACTIVE ]: Players present in area boundary ]]
+				-- Tanks are present in the capture zone.
 				if countGER == countBR then
-					-- [[ CASE 3 ]: Balanced contest state. Lock progress ratio exactly in place.
+					-- Equal team counts contest the zone; progress does not change.
 					zone:SetAttribute("Owner", "Neutral") -- Contested zones have no owner.
-					-- Skip modifications; mathematical change rate equals zero
+					-- Progress remains unchanged.
 				else
 					local dominantTeam = (countGER > countBR) and "Germany" or "Britain"
 					local netAdvantage = math.abs(countGER - countBR)
@@ -342,15 +342,15 @@ task.spawn(function()
 					end
 
 					if capturingTeam == dominantTeam then
-						-- [[ CASE 1 ]: Pushing team's corresponding scale metrics upwards
+						-- The team with the numerical advantage advances capture progress.
 						currentProgress = math.min(currentProgress + rate, 100)
 						if currentProgress >= 100 then
-							-- [[  DYNAMIC CAPTURE REWARD LOGIC ]] --
+							-- Award points when ownership changes.
 							if zone:GetAttribute("Owner") ~= dominantTeam then
 								local prevOwner = zone:GetAttribute("PreviousOwner") or "Neutral"
 
 								if prevOwner == "Neutral" then
-									-- Captured a completely uncontested/neutral zone
+								-- Award points for capturing a neutral zone.
 									local currentPlayers = Players:GetPlayers()
 									for pIdx = 1, #currentPlayers do
 										local player = currentPlayers[pIdx]
@@ -362,7 +362,7 @@ task.spawn(function()
 									end
 									print(string.format(" [Conquest]: %s captured Neutral zone. Awarded 5 points.", dominantTeam))
 								elseif prevOwner ~= dominantTeam then
-									-- Successfully recaptured/stole the zone back from the Enemy faction
+								-- Award points for capturing a zone from the opposing team.
 									local currentPlayers = Players:GetPlayers()
 									for pIdx = 1, #currentPlayers do
 										local player = currentPlayers[pIdx]
@@ -382,7 +382,7 @@ task.spawn(function()
 							zone:SetAttribute("Owner", "Neutral") -- Ownership is cleared until capture completes.
 						end
 					else
-						-- Depleting enemy progress down toward zero threshold
+						-- Reduce the opposing team's capture progress.
 						currentProgress = math.max(currentProgress - rate, 0)
 						zone:SetAttribute("Owner", "Neutral") -- Clear ownership while capture progress is reduced.
 						if currentProgress <= 0 then
@@ -392,14 +392,14 @@ task.spawn(function()
 					end
 				end
 			else
-				-- [[ FIELD VACANT ]: Automatic Decay / Recovery Routine ]
+				-- No tanks are present; recover or decay capture progress.
 				if capturingTeam ~= "Neutral" and currentProgress > 0 then
 					if capturingTeam == previousOwner then
-						-- [[ CASE 2 ]: Recharging back to original 100% threshold
+						-- Restore progress toward the previous owner's control.
 						currentProgress = math.min(currentProgress + 3, 100)
 						if currentProgress >= 100 then zone:SetAttribute("Owner", capturingTeam) else zone:SetAttribute("Owner", "Neutral") end
 					else
-						-- Incomplete attackers vacated. Decay progress down to neutral void state.
+						-- Decay incomplete capture progress when attackers leave.
 						currentProgress = math.max(currentProgress - 3, 0)
 						zone:SetAttribute("Owner", "Neutral")
 						if currentProgress <= 0 then
@@ -415,7 +415,7 @@ task.spawn(function()
 	end
 end)
 
--- [[  OUT-OF-COMBAT AUTOMATED REGENERATION THREAD ]] --
+-- Out-of-combat tank regeneration
 task.spawn(function()
 	while true do
 		task.wait(HEAL_TICK_RATE)
@@ -460,7 +460,7 @@ task.spawn(function()
 	end
 end)
 
--- [[  PASSIVE REWARD SYSTEM ]] --
+-- Passive point rewards
 task.spawn(function()
 	while true do
 		task.wait(120) -- Award passive points every two minutes.
@@ -479,9 +479,9 @@ task.spawn(function()
 end)
 
 
--- [[  PASSIVE CASH REWARD SYSTEM ]] --
--- Pays $100 for every 90 seconds a player remains in this server.
--- Rewards are granted by the server and stored in PlayerDataManager's session data.
+-- Passive cash rewards
+-- Pay players every 90 seconds while they remain in the server.
+-- Cash is added through PlayerDataManager.
 local CASH_REWARD_INTERVAL = 90
 local CASH_REWARD_AMOUNT = 100
 local cashRewardRunning = {}
@@ -491,7 +491,7 @@ local function startPassiveCashRewards(player)
 	cashRewardRunning[player] = true
 
 	task.spawn(function()
-		-- Do not start the player's timer until their saved data has loaded.
+		-- Wait for the player's data to load before starting the timer.
 		while player.Parent and not PlayerDataManager.IsDataLoaded(player) do
 			task.wait(0.25)
 		end
@@ -528,7 +528,7 @@ Players.PlayerRemoving:Connect(function(player)
 	cashRewardRunning[player] = nil
 end)
 
--- Handle players already present if this script starts after they joined.
+-- Start reward timers for players already in the server.
 for _, player in ipairs(Players:GetPlayers()) do
 	startPassiveCashRewards(player)
 end
